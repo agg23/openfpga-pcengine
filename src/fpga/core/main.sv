@@ -123,30 +123,30 @@ module pce (
       .CD_EN(cd_en),
       .AC_EN(status[14]),
 
-      .CD_RAM_A (cd_ram_a),
-      .CD_RAM_DO(cd_ram_do),
-      .CD_RAM_DI(rom_sdata),
-      .CD_RAM_RD(cd_ram_rd),
-      .CD_RAM_WR(cd_ram_wr),
+      // .CD_RAM_A (cd_ram_a),
+      // .CD_RAM_DO(cd_ram_do),
+      // .CD_RAM_DI(rom_sdata),
+      // .CD_RAM_RD(cd_ram_rd),
+      // .CD_RAM_WR(cd_ram_wr),
 
-      .CD_STAT(cd_stat[7:0]),
-      .CD_MSG(cd_stat[15:8]),
-      .CD_STAT_GET(cd_stat_rec),
+      // .CD_STAT(cd_stat[7:0]),
+      // .CD_MSG(cd_stat[15:8]),
+      // .CD_STAT_GET(cd_stat_rec),
 
-      .CD_COMM(cd_comm),
-      .CD_COMM_SEND(cd_comm_send),
+      // .CD_COMM(cd_comm),
+      // .CD_COMM_SEND(cd_comm_send),
 
-      .CD_DOUT_REQ(cd_dataout_req),
-      .CD_DOUT(cd_dataout),
-      .CD_DOUT_SEND(cd_dataout_send),
+      // .CD_DOUT_REQ(cd_dataout_req),
+      // .CD_DOUT(cd_dataout),
+      // .CD_DOUT_SEND(cd_dataout_send),
 
-      .CD_REGION(cd_region),
-      .CD_RESET (cd_reset_req),
+      // .CD_REGION(cd_region),
+      // .CD_RESET (cd_reset_req),
 
-      .CD_DATA(!cd_dat_byte ? cd_dat[7:0] : cd_dat[15:8]),
-      .CD_WR(cd_wr),
-      .CD_DATA_END(cd_dat_req),
-      .CD_DM(cd_dm),
+      // .CD_DATA(!cd_dat_byte ? cd_dat[7:0] : cd_dat[15:8]),
+      // .CD_WR(cd_wr),
+      // .CD_DATA_END(cd_dat_req),
+      // .CD_DM(cd_dm),
 
       .CDDA_SL(cdda_sl),
       .CDDA_SR(cdda_sr),
@@ -353,7 +353,8 @@ module pce (
 
   ////////////////////////////  MEMORY  //////////////////////////////////
 
-  localparam LITE = 0;
+  // TODO: SGX
+  localparam LITE = 1;
 
   wire [21:0] rom_rdaddr;
   wire [ 7:0] rom_sdata;
@@ -423,16 +424,16 @@ module pce (
 
   reg prev_ioctl_wr = 0;
   reg rom_wr = 0;
-  wire sd_wrack, dd_wrack;
+  wire sd_wrack;
 
   // Special support for the Populous ROM
   reg [1:0] populous;
   reg sgx;
   always @(posedge clk_sys_42_95) begin
-    reg old_download, old_reset;
+    reg old_download;
 
-    old_download <= cart_download;
-    old_reset <= reset;
+    old_download  <= cart_download;
+    // old_reset <= reset;
     prev_ioctl_wr <= ioctl_wr;
 
     // if (~old_reset && reset) ioctl_wait <= 0;
@@ -443,7 +444,7 @@ module pce (
       // sgx <= ioctl_index[0];
       sgx <= 0;
     end else begin
-      if (ioctl_wr & cart_download) begin
+      if (ioctl_wr && ~prev_ioctl_wr) begin
         // ioctl_wait <= 1;
         rom_wr <= ~rom_wr;
         // Hacks for Populous game
@@ -455,11 +456,9 @@ module pce (
             12: if (romwr_d != 'h5355) populous[romwr_a[13]] <= 0;
           endcase
         end
-      end
-
-      // else if (rom_wr == sd_wrack) begin
-      if (~ioctl_wr && prev_ioctl_wr) begin
-        // Falling edge of wr
+      end  // else if (rom_wr == sd_wrack) begin
+      else if (~ioctl_wr && prev_ioctl_wr) begin
+        // Falling edge of ioctl_wr
         // ioctl_wait <= 0;
         romwr_a <= romwr_a + 24'd2;
       end
@@ -499,13 +498,13 @@ module pce (
 
   ////////////////////////////  INPUT  ///////////////////////////////////
 
-  wire [11:0] joy0 = {
+  wire [11:0] joy_0 = {
+    1'b0,
+    1'b0,
+    1'b0,
+    1'b0,
     button_start,
     button_select,
-    1'b0,
-    1'b0,
-    1'b0,
-    1'b0,
     button_b,
     button_a,
     dpad_up,
@@ -514,7 +513,6 @@ module pce (
     dpad_right
   };
 
-  wire [11:0] joy_0 = 0;
   wire [11:0] joy_1 = 0;
   wire [11:0] joy_2 = 0;
   wire [11:0] joy_3 = 0;
@@ -536,7 +534,7 @@ module pce (
     endcase
   end
 
-  reg  [6:0] pachinko;
+  reg [6:0] pachinko = 0;
   // always @(posedge clk_sys_42_95) begin
   //   reg use_paddle = 0;
   //   reg old_pd = 0;
@@ -559,7 +557,7 @@ module pce (
   //   end
   // end
 
-  wire [7:0] mouse_data;
+  wire [7:0] mouse_data = 0;
   // assign mouse_data[3:0] = ~{ joy_0[7:6] | {ps2_mouse_ext[8], ps2_mouse_ext[9]} , ps2_mouse[0], ps2_mouse[1]};
 
   // always_comb begin
@@ -571,9 +569,9 @@ module pce (
   //   endcase
   // end
 
-  reg  [3:0] joy_latch;
-  reg  [2:0] joy_port;
-  reg  [1:0] mouse_cnt;
+  reg [3:0] joy_latch;
+  reg [2:0] joy_port;
+  reg [1:0] mouse_cnt;
   reg [7:0] ms_x, ms_y;
 
   always @(posedge clk_sys_42_95) begin : input_block
