@@ -20,6 +20,7 @@ module pce (
     // Settings
     input wire overscan_enable,
     input wire border_enable,
+    input wire mb128_enable,
 
     output wire [1:0] dotclock_divider,
 
@@ -28,6 +29,13 @@ module pce (
     input wire [23:0] ioctl_addr,
     input wire [15:0] ioctl_dout,
     input wire        cart_download,
+
+    // Data out
+    input wire [7:0] sd_buff_addr,
+    input wire [16:0] sd_lba,
+    input wire [15:0] sd_buff_dout,
+    output wire [15:0] sd_buff_din,
+    input wire save_loading,
 
     // SDRAM
     output wire [12:0] dram_a,
@@ -54,23 +62,23 @@ module pce (
     output wire [15:0] audio_r
 );
 
-  wire                                  [63:0] status = 0;
+  wire                                    [63:0] status = 0;
 
   wire code_download = 0;
 
-  wire img_mounted = 0;
-  wire img_readonly = 0;
-  wire sd_ack = 0;
-  reg                                                              sd_rd = 0;
-  reg                                                              sd_wr = 0;
-  reg                                   [31:0]                     sd_lba = 0;
+  // wire img_mounted = 0;
+  // wire img_readonly = 0;
+  // wire sd_ack = 0;
+  // reg                                                              sd_rd = 0;
+  // reg                                                              sd_wr = 0;
+  // reg                                   [31:0]                     sd_lba = 0;
 
   wire VDC_BG_EN = 1;
   wire VDC_SPR_EN = 1;
-  wire                                  [ 1:0] VDC_GRID_EN = 2'd0;
+  wire                                    [ 1:0] VDC_GRID_EN = 2'd0;
   wire CPU_PAUSE_EN = 0;
 
-  wire reset = (~reset_n | bk_loading);
+  wire reset = (~reset_n | save_loading);
 
   // wire code_index      = &ioctl_index;
   // wire code_download   = ioctl_download & code_index;
@@ -79,17 +87,17 @@ module pce (
 
   wire overscan = ~status[17];
 
-  wire                                  [95:0]                     cd_comm;
-  wire                                                             cd_comm_send;
-  reg                                   [15:0]                     cd_stat;
-  reg                                                              cd_stat_rec;
-  reg                                                              cd_dataout_req;
-  wire                                  [79:0]                     cd_dataout;
-  wire                                                             cd_dataout_send;
-  wire                                                             cd_reset_req;
-  reg                                                              cd_region;
+  wire                                    [95:0]                     cd_comm;
+  wire                                                               cd_comm_send;
+  reg                                     [15:0]                     cd_stat;
+  reg                                                                cd_stat_rec;
+  reg                                                                cd_dataout_req;
+  wire                                    [79:0]                     cd_dataout;
+  wire                                                               cd_dataout_send;
+  wire                                                               cd_reset_req;
+  reg                                                                cd_region;
 
-  wire                                  [21:0]                     cd_ram_a;
+  wire                                    [21:0]                     cd_ram_a;
   wire cd_ram_rd, cd_ram_wr;
   wire [7:0] cd_ram_do;
 
@@ -362,7 +370,7 @@ module pce (
 
   ////////////////////////////  MEMORY  //////////////////////////////////
 
-  localparam LITE = 0;
+  localparam LITE = 1;
 
   wire [21:0] rom_rdaddr;
   wire [ 7:0] rom_sdata;
@@ -629,46 +637,46 @@ module pce (
   /////////////////////////  BACKUP RAM SAVE/LOAD  /////////////////////////////
 
   wire [15:0] mb128_dout;
-  wire mb128_dirty;
-  wire mb128_ena = status[21];
+  // wire mb128_dirty;
+  wire mb128_ena = mb128_enable;
   wire mb128_Active;
   wire [3:0] mb128_Data;
 
-  MB128 MB128 (
-      .reset  (reset | cart_download),
-      .clk_sys(clk_sys_42_95),
+  // MB128 MB128 (
+  //     .reset  (reset | cart_download),
+  //     .clk_sys(clk_sys_42_95),
 
-      .i_Clk (mb128_ena & joy_out[1]),  // send only if MB128 enabled
-      .i_Data(joy_out[0]),
+  //     .i_Clk (mb128_ena & joy_out[1]),  // send only if MB128 enabled
+  //     .i_Data(joy_out[0]),
 
-      .o_Active(mb128_Active),  // high if MB128 asserts itself instead of joypad inputs
-      .o_Data  (mb128_Data),
+  //     .o_Active(mb128_Active),  // high if MB128 asserts itself instead of joypad inputs
+  //     .o_Data  (mb128_Data),
 
-      .bk_clk(clk_sys_42_95),
-      .bk_address({sd_lba[7:0] - 3'd4, sd_buff_addr}),
-      .bk_din(sd_buff_dout),
-      .bk_dout(mb128_dout),
-      .bk_we(~bk_int & sd_buff_wr & sd_ack),
-      .bk_written(mb128_dirty)
-  );
+  //     .bk_clk(clk_sys_42_95),
+  //     .bk_address({sd_lba[7:0] - 3'd4, sd_buff_addr}),
+  //     .bk_din(sd_buff_dout),
+  //     .bk_dout(mb128_dout),
+  //     .bk_we(~bk_int & sd_buff_wr)
+  //     // .bk_written(mb128_dirty)
+  // );
 
-  reg bk_pending;
+  // reg bk_pending;
 
-  always @(posedge clk_sys_42_95) begin
-    if (bk_ena && (bram_wr || mb128_dirty)) bk_pending <= 1'b1;
-    else if (bk_state) bk_pending <= 1'b0;
-  end
+  // always @(posedge clk_sys_42_95) begin
+  //   if (bk_ena && (bram_wr || mb128_dirty)) bk_pending <= 1'b1;
+  //   else if (bk_state) bk_pending <= 1'b0;
+  // end
 
   wire [10:0] bram_addr;
   wire [7:0] bram_data;
   wire [7:0] bram_q;
   wire bram_wr;
 
-  wire format = status[12];
-  reg [3:0] defbram = 4'hF;
+  // wire format = status[12];
+  // reg [3:0] defbram = 4'hF;
   reg [15:0] defval[4] = '{16'h5548, 16'h4D42, 16'h8800, 16'h8010};  //{ HUBM,0x00881080 };
 
-  wire bk_int = !sd_lba[31:2];
+  wire bk_int = !sd_lba[15:2];
   wire [15:0] bk_int_dout;
 
   assign sd_buff_din = bk_int ? bk_int_dout : mb128_dout;
@@ -681,79 +689,83 @@ module pce (
       .q_a(bram_q),
 
       .clock1(clk_sys_42_95),
-      .address_b(defbram[3] ? {sd_lba[1:0], sd_buff_addr} : defbram[2:1]),
-      .data_b(defbram[3] ? sd_buff_dout : defval[defbram[2:1]]),
-      .wren_b(defbram[3] ? bk_int & sd_buff_wr & sd_ack : 1'b1),
+      // .address_b(defbram[3] ? {sd_lba[1:0], sd_buff_addr} : defbram[2:1]),
+      // .data_b(defbram[3] ? sd_buff_dout : defval[defbram[2:1]]),
+      // .wren_b(defbram[3] ? bk_int & sd_buff_wr & sd_ack : 1'b1),
+      .address_b({sd_lba[1:0], sd_buff_addr}),
+      .data_b(sd_buff_dout),
+      .wren_b(bk_int & sd_buff_wr),
+
       .q_b(bk_int_dout)
   );
 
   wire downloading = cart_download;
   reg old_downloading = 0;
 
-  reg bk_ena = 0;
-  always @(posedge clk_sys_42_95) begin
+  // reg bk_ena = 0;
+  // always @(posedge clk_sys_42_95) begin
 
-    old_downloading <= downloading;
-    if (~old_downloading & downloading) bk_ena <= 0;
+  //   old_downloading <= downloading;
+  //   if (~old_downloading & downloading) bk_ena <= 0;
 
-    //Save file always mounted in the end of downloading state.
-    if (downloading && img_mounted && !img_readonly) bk_ena <= 1;
-  end
+  //   //Save file always mounted in the end of downloading state.
+  //   if (downloading && img_mounted && !img_readonly) bk_ena <= 1;
+  // end
 
-  wire bk_load    = status[16];
-  wire bk_save    = status[7] | (bk_pending && status[23]);
-  reg  bk_loading = 0;
-  reg  bk_state   = 0;
+  // wire bk_load    = status[16];
+  // wire bk_save    = status[7] | (bk_pending && status[23]);
+  // reg  bk_loading = 0;
+  // reg  bk_state   = 0;
 
-  always @(posedge clk_sys_42_95) begin
-    reg old_format;
-    reg old_load = 0, old_save = 0, old_ack;
-    reg mb128sz;
+  // always @(posedge clk_sys_42_95) begin
+  //   // reg old_format;
+  //   reg old_load = 0, old_save = 0, old_ack;
+  //   reg mb128sz;
 
-    old_load <= bk_load;
-    old_save <= bk_save;
-    old_ack  <= sd_ack;
+  //   old_load <= bk_load;
+  //   old_save <= bk_save;
+  //   old_ack  <= sd_ack;
 
-    if (~old_ack & sd_ack) {sd_rd, sd_wr} <= 0;
+  //   if (~old_ack & sd_ack) {sd_rd, sd_wr} <= 0;
 
-    if (!bk_state) begin
-      if (bk_ena & ((~old_load & bk_load) | (~old_save & bk_save))) begin
-        bk_state <= 1;
-        bk_loading <= bk_load;
-        mb128sz <= bk_load || (mb128_ena && mb128_dirty);
-        sd_lba <= 0;
-        sd_rd <= bk_load;
-        sd_wr <= ~bk_load;
-      end
-      if (old_downloading & ~downloading & bk_ena) begin
-        bk_state <= 1;
-        bk_loading <= 1;
-        mb128sz <= 1;
-        sd_lba <= 0;
-        sd_rd <= 1;
-        sd_wr <= 0;
-      end
-    end else begin
-      if (old_ack & ~sd_ack) begin
-        if (sd_lba[8] == mb128sz && &sd_lba[1:0]) begin
-          bk_loading <= 0;
-          bk_state <= 0;
-          sd_lba <= 0;
-        end else begin
-          sd_lba <= sd_lba + 1'd1;
-          sd_rd  <= bk_loading;
-          sd_wr  <= ~bk_loading;
-        end
-      end
-    end
+  //   if (!bk_state) begin
+  //     if (bk_ena & ((~old_load & bk_load) | (~old_save & bk_save))) begin
+  //       bk_state <= 1;
+  //       bk_loading <= bk_load;
+  //       mb128sz <= bk_load || (mb128_ena && mb128_dirty);
+  //       sd_lba <= 0;
+  //       sd_rd <= bk_load;
+  //       sd_wr <= ~bk_load;
+  //     end
+  //     if (old_downloading & ~downloading & bk_ena) begin
+  //       bk_state <= 1;
+  //       bk_loading <= 1;
+  //       mb128sz <= 1;
+  //       sd_lba <= 0;
+  //       sd_rd <= 1;
+  //       sd_wr <= 0;
+  //     end
+  //   end else begin
+  //     if (old_ack & ~sd_ack) begin
+  //       if (sd_lba[8] == mb128sz && &sd_lba[1:0]) begin
+  //         bk_loading <= 0;
+  //         bk_state <= 0;
+  //         sd_lba <= 0;
+  //       end else begin
+  //         sd_lba <= sd_lba + 1'd1;
+  //         sd_rd  <= bk_loading;
+  //         sd_wr  <= ~bk_loading;
+  //       end
+  //     end
+  //   end
 
-    old_format <= format;
-    if (~old_format && format) begin
-      defbram <= 0;
-    end
-    if (~defbram[3]) begin
-      defbram <= defbram + 4'd1;
-    end
-  end
+  //   // old_format <= format;
+  //   // if (~old_format && format) begin
+  //   //   defbram <= 0;
+  //   // end
+  //   // if (~defbram[3]) begin
+  //   //   defbram <= defbram + 4'd1;
+  //   // end
+  // end
 
 endmodule

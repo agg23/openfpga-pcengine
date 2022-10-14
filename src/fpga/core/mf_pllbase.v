@@ -14,8 +14,6 @@ module mf_pllbase (
 		output wire  outclk_3, // outclk3.clk
 		output wire  outclk_4, // outclk4.clk
 		output wire  outclk_5, // outclk5.clk
-		output wire  outclk_6, // outclk6.clk
-		output wire  outclk_7, // outclk7.clk
 		output wire  locked    //  locked.export
 	);
 
@@ -28,8 +26,6 @@ module mf_pllbase (
 		.outclk_3 (outclk_3), // outclk3.clk
 		.outclk_4 (outclk_4), // outclk4.clk
 		.outclk_5 (outclk_5), // outclk5.clk
-		.outclk_6 (outclk_6), // outclk6.clk
-		.outclk_7 (outclk_7), // outclk7.clk
 		.locked   (locked)    //  locked.export
 	);
 
@@ -75,7 +71,7 @@ endmodule
 // Retrieval info: 	<generic name="gui_dsm_out_sel" value="1st_order" />
 // Retrieval info: 	<generic name="gui_use_locked" value="true" />
 // Retrieval info: 	<generic name="gui_en_adv_params" value="false" />
-// Retrieval info: 	<generic name="gui_number_of_clocks" value="8" />
+// Retrieval info: 	<generic name="gui_number_of_clocks" value="6" />
 // Retrieval info: 	<generic name="gui_multiply_factor" value="1" />
 // Retrieval info: 	<generic name="gui_frac_multiply_factor" value="1" />
 // Retrieval info: 	<generic name="gui_divide_factor_n" value="1" />

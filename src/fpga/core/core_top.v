@@ -314,10 +314,8 @@ module core_top (
       default: begin
         bridge_rd_data <= 0;
       end
-      32'h10xxxxxx: begin
-        // example
-        // bridge_rd_data <= example_device_data;
-        bridge_rd_data <= 0;
+      32'h2xxxxxxx: begin
+        bridge_rd_data <= sd_read_data;
       end
       32'hF8xxxxxx: begin
         bridge_rd_data <= cmd_bridge_rd_data;
@@ -328,9 +326,9 @@ module core_top (
   always @(posedge clk_74a) begin
     if (bridge_wr) begin
       casex (bridge_addr)
-        32'h0: begin
-          ioctl_download <= bridge_wr_data[0];
-        end
+        // 32'h0: begin
+        //   ioctl_download <= bridge_wr_data[0];
+        // end
         32'h4: begin
           is_sgx <= bridge_wr_data[0];
         end
@@ -340,6 +338,9 @@ module core_top (
         32'h104: begin
           border_enable <= bridge_wr_data[0];
         end
+        // 32'h200: begin
+        //   mb128_enable <= bridge_wr_data[0];
+        // end
       endcase
     end
   end
@@ -393,9 +394,9 @@ module core_top (
 
   // bridge data slot access
 
-  wire [9:0] datatable_addr;
-  wire datatable_wren;
-  wire [31:0] datatable_data;
+  reg [9:0] datatable_addr;
+  reg datatable_wren;
+  reg [31:0] datatable_data;
   wire [31:0] datatable_q;
 
   core_bridge_cmd icb (
@@ -457,16 +458,50 @@ module core_top (
   wire [23:0] ioctl_addr;
   wire [15:0] ioctl_dout;
 
+  always @(posedge clk_74a) begin
+    if (dataslot_requestwrite) ioctl_download <= 1;
+    else if (dataslot_allcomplete) ioctl_download <= 0;
+  end
+
+  wire [31:0] sd_read_data;
+
+  wire sd_rd;
+  wire sd_wr;
+  wire [15:0] sd_buff_din;
+  wire [15:0] sd_buff_dout;
+
+  wire [24:0] sd_buff_addr = sd_wr ? sd_buff_addr_in : sd_buff_addr_out;
+  wire [24:0] sd_buff_addr_in;
+  wire [24:0] sd_buff_addr_out;
+
+  wire save_loading = dataslot_requestwrite_id == 1 || dataslot_requestread_id == 1;
+
   wire ioctl_download_s;
+  wire save_loading_s;
   wire is_sgx_s;
 
   synch_3 #(
-      .WIDTH(2)
+      .WIDTH(3)
   ) download_s (
-      {ioctl_download, is_sgx},
-      {ioctl_download_s, is_sgx_s},
+      {ioctl_download, save_loading, is_sgx},
+      {ioctl_download_s, save_loading_s, is_sgx_s},
       clk_mem_85_91
   );
+
+  always @(posedge clk_74a or negedge pll_core_locked) begin
+    if (~pll_core_locked) begin
+      datatable_addr <= 0;
+      datatable_data <= 0;
+      datatable_wren <= 0;
+    end else begin
+      // Write sram size
+      datatable_wren <= 1;
+
+      datatable_data <= mb128_enable ? 32'h20000 : 32'h800;
+      // Data slot index 1, not id 1
+      datatable_addr <= 1 * 2 + 1;
+    end
+  end
 
   data_loader #(
       .ADDRESS_MASK_UPPER_4(4'h1),
@@ -489,22 +524,46 @@ module core_top (
       .write_data(ioctl_dout)
   );
 
-  //   data_unloader #(
-  //       .ADDRESS_MASK_UPPER_4(4'h2),
-  //       .ADDRESS_SIZE(25)
-  //   ) data_unloader (
-  //       .clk_74a(clk_74a),
-  //       .clk_memory(clk_sys_21_48),
+  data_loader #(
+      .ADDRESS_MASK_UPPER_4(4'h2),
+      .ADDRESS_SIZE(24),
+      .OUTPUT_WORD_SIZE(2),
 
-  //       .bridge_rd(bridge_rd),
-  //       .bridge_endian_little(bridge_endian_little),
-  //       .bridge_addr(bridge_addr),
-  //       .bridge_rd_data(sd_read_data),
+      .WRITE_MEM_CLOCK_DELAY(16),
+      .WRITE_MEM_EN_CYCLE_LENGTH(8)
+  ) save_data_loader (
+      .clk_74a(clk_74a),
+      .clk_memory(clk_sys_42_95),
 
-  //       .read_en  (sd_rd),
-  //       .read_addr(sd_buff_addr_out),
-  //       .read_data(sd_buff_din)
-  //   );
+      .bridge_wr(bridge_wr),
+      .bridge_endian_little(bridge_endian_little),
+      .bridge_addr(bridge_addr),
+      .bridge_wr_data(bridge_wr_data),
+
+      .write_en  (sd_wr),
+      .write_addr(sd_buff_addr_in),
+      .write_data(sd_buff_dout)
+  );
+
+  data_unloader #(
+      .ADDRESS_MASK_UPPER_4(4'h2),
+      .ADDRESS_SIZE(25),
+      .INPUT_WORD_SIZE(2),
+
+      .READ_MEM_CLOCK_DELAY(16)
+  ) save_data_unloader (
+      .clk_74a(clk_74a),
+      .clk_memory(clk_sys_42_95),
+
+      .bridge_rd(bridge_rd),
+      .bridge_endian_little(bridge_endian_little),
+      .bridge_addr(bridge_addr),
+      .bridge_rd_data(sd_read_data),
+
+      .read_en  (sd_rd),
+      .read_addr(sd_buff_addr_out),
+      .read_data(sd_buff_din)
+  );
 
   wire [15:0] cont1_key_s;
 
@@ -520,15 +579,17 @@ module core_top (
 
   reg  overscan_enable = 0;
   reg  border_enable = 0;
+  reg  mb128_enable = 0;
 
   wire overscan_enable_s;
   wire border_enable_s;
+  wire mb128_enable_s;
 
   synch_3 #(
       .WIDTH(2)
   ) settings_s (
-      {overscan_enable, border_enable},
-      {overscan_enable_s, border_enable_s},
+      {overscan_enable, border_enable, mb128_enable},
+      {overscan_enable_s, border_enable_s, mb128_enable_s},
       clk_sys_42_95
   );
 
@@ -558,7 +619,8 @@ module core_top (
 
       // Settings
       .overscan_enable(overscan_enable_s),
-      .border_enable  (border_enable_s),
+      .border_enable(border_enable_s),
+      .mb128_enable(mb128_enable_s),
 
       .dotclock_divider(dotclock_divider),
 
@@ -567,6 +629,13 @@ module core_top (
       .ioctl_addr(ioctl_addr),
       .ioctl_dout(ioctl_dout),
       .cart_download(ioctl_download_s),
+
+      // Data out
+      .sd_buff_addr(sd_buff_addr[7:0]),
+      .sd_lba(sd_buff_addr[24:8]),
+      .sd_buff_dout(sd_buff_dout),
+      .sd_buff_din(sd_buff_din),
+      .save_loading(save_loading_s),
 
       // SDRAM
       .dram_a(dram_a),
@@ -611,15 +680,17 @@ module core_top (
 
   always @(*) begin
     casex (dotclock_divider)
-      2'b00: begin
-        current_pix_clk <= clk_vid_5_369;
-        current_pix_clk_90 <= clk_vid_5_369_90deg;
-      end
+      // 2'b00: begin
+      //   current_pix_clk <= clk_vid_5_369;
+      //   current_pix_clk_90 <= clk_vid_5_369_90deg;
+      // end
       2'b01: begin
         current_pix_clk <= clk_vid_7_159;
         current_pix_clk_90 <= clk_vid_7_159_90deg;
       end
-      2'b1X: begin
+      // 2'b1X: begin
+      default: begin
+        // Both 512 and 256 at the same clock. 256 is doubled
         current_pix_clk <= clk_vid_10_738;
         current_pix_clk_90 <= clk_vid_10_738_90deg;
       end
@@ -706,8 +777,8 @@ module core_top (
   wire clk_vid_10_738_90deg;
   wire clk_vid_7_159;
   wire clk_vid_7_159_90deg;
-  wire clk_vid_5_369;
-  wire clk_vid_5_369_90deg;
+  // wire clk_vid_5_369;
+  // wire clk_vid_5_369_90deg;
 
   wire pll_core_locked;
 
@@ -721,8 +792,8 @@ module core_top (
       .outclk_3(clk_vid_10_738_90deg),
       .outclk_4(clk_vid_7_159),
       .outclk_5(clk_vid_7_159_90deg),
-      .outclk_6(clk_vid_5_369),
-      .outclk_7(clk_vid_5_369_90deg),
+      // .outclk_6(clk_vid_5_369),
+      // .outclk_7(clk_vid_5_369_90deg),
 
       .locked(pll_core_locked)
   );
