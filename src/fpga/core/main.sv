@@ -15,6 +15,8 @@ module pce (
     input wire dpad_left,
     input wire dpad_right,
 
+    input wire sgx,
+
     // Settings
     input wire overscan_enable,
     input wire border_enable,
@@ -360,8 +362,7 @@ module pce (
 
   ////////////////////////////  MEMORY  //////////////////////////////////
 
-  // TODO: SGX
-  localparam LITE = 1;
+  localparam LITE = 0;
 
   wire [21:0] rom_rdaddr;
   wire [ 7:0] rom_sdata;
@@ -435,7 +436,7 @@ module pce (
 
   // Special support for the Populous ROM
   reg [1:0] populous;
-  reg sgx;
+  // reg sgx;
   always @(posedge clk_sys_42_95) begin
     reg old_download;
 
@@ -445,11 +446,9 @@ module pce (
 
     // if (~old_reset && reset) ioctl_wait <= 0;
     if (~old_download && cart_download) begin
-      romwr_a <= 0;
+      romwr_a  <= 0;
       populous <= 2'b11;
-      // TODO
       // sgx <= ioctl_index[0];
-      sgx <= 0;
     end else begin
       if (ioctl_wr && ~prev_ioctl_wr) begin
         // ioctl_wait <= 1;

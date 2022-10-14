@@ -1,4 +1,6 @@
 *.rbf_r
+*.rev
+*.bin
 src/sim/work/
 src/sim/*.hex
 src/sim/*.mem

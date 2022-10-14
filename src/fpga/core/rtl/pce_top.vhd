@@ -637,7 +637,7 @@ CD : entity work.cd
 port map(
 	CLK 			=> CLK,
 	RST_N			=> RESET_N,
-	EN				=> '1',
+	EN				=> '0',
 
 	EXT_A			=> CPU_A,
 	EXT_DI		=> CPU_DO,

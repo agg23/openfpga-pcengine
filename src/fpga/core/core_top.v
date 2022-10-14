@@ -328,10 +328,16 @@ module core_top (
   always @(posedge clk_74a) begin
     if (bridge_wr) begin
       casex (bridge_addr)
-        32'h00000100: begin
+        32'h0: begin
+          ioctl_download <= bridge_wr_data[0];
+        end
+        32'h4: begin
+          is_sgx <= bridge_wr_data[0];
+        end
+        32'h100: begin
           overscan_enable <= bridge_wr_data[0];
         end
-        32'h00000104: begin
+        32'h104: begin
           border_enable <= bridge_wr_data[0];
         end
       endcase
@@ -446,20 +452,19 @@ module core_top (
   );
 
   reg ioctl_download = 0;
+  reg is_sgx = 0;
   wire ioctl_wr;
   wire [23:0] ioctl_addr;
   wire [15:0] ioctl_dout;
 
-  always @(posedge clk_74a) begin
-    if (dataslot_requestwrite) ioctl_download <= 1;
-    else if (dataslot_allcomplete) ioctl_download <= 0;
-  end
-
   wire ioctl_download_s;
+  wire is_sgx_s;
 
-  synch_3 download_s (
-      ioctl_download,
-      ioctl_download_s,
+  synch_3 #(
+      .WIDTH(2)
+  ) download_s (
+      {ioctl_download, is_sgx},
+      {ioctl_download_s, is_sgx_s},
       clk_mem_85_91
   );
 
@@ -513,8 +518,8 @@ module core_top (
 
   // Settings
 
-  reg  overscan_enable;
-  reg  border_enable;
+  reg  overscan_enable = 0;
+  reg  border_enable = 0;
 
   wire overscan_enable_s;
   wire border_enable_s;
@@ -539,6 +544,8 @@ module core_top (
       .reset_n(reset_n),
       .pll_core_locked(pll_core_locked),
 
+      .sgx(is_sgx_s),
+
       // Input
       .button_a(cont1_key_s[4]),
       .button_b(cont1_key_s[5]),
@@ -559,7 +566,7 @@ module core_top (
       .ioctl_wr(ioctl_wr),
       .ioctl_addr(ioctl_addr),
       .ioctl_dout(ioctl_dout),
-      .cart_download(ioctl_download),
+      .cart_download(ioctl_download_s),
 
       // SDRAM
       .dram_a(dram_a),
