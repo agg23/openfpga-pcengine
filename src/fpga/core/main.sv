@@ -15,6 +15,12 @@ module pce (
     input wire dpad_left,
     input wire dpad_right,
 
+    // Settings
+    input wire overscan_enable,
+    input wire border_enable,
+
+    output wire [1:0] dotclock_divider,
+
     // Data in
     input wire        ioctl_wr,
     input wire [23:0] ioctl_addr,
@@ -159,8 +165,9 @@ module pce (
       .GRID_EN(VDC_GRID_EN),
       .CPU_PAUSE_EN(CPU_PAUSE_EN),
 
-      .ReducedVBL(~overscan),
-      .BORDER_EN(~status[15]),
+      .ReducedVBL(~overscan_enable),
+      .BORDER_EN(border_enable),
+      .DOTCLOCK_DIVIDER(dotclock_divider),
       .VIDEO_R(r),
       .VIDEO_G(g),
       .VIDEO_B(b),

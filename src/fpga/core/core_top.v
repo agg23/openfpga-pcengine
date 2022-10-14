@@ -325,6 +325,18 @@ module core_top (
     endcase
   end
 
+  always @(posedge clk_74a) begin
+    if (bridge_wr) begin
+      casex (bridge_addr)
+        32'h00000100: begin
+          overscan_enable <= bridge_wr_data[0];
+        end
+        32'h00000104: begin
+          border_enable <= bridge_wr_data[0];
+        end
+      endcase
+    end
+  end
 
   //
   // host/target command handler
@@ -499,8 +511,26 @@ module core_top (
       clk_sys_42_95
   );
 
+  // Settings
+
+  reg  overscan_enable;
+  reg  border_enable;
+
+  wire overscan_enable_s;
+  wire border_enable_s;
+
+  synch_3 #(
+      .WIDTH(2)
+  ) settings_s (
+      {overscan_enable, border_enable},
+      {overscan_enable_s, border_enable_s},
+      clk_sys_42_95
+  );
+
   wire [15:0] audio_l;
   wire [15:0] audio_r;
+
+  wire [ 1:0] dotclock_divider;
 
   pce pce (
       .clk_sys_42_95(clk_sys_42_95),
@@ -518,6 +548,12 @@ module core_top (
       .dpad_down(cont1_key_s[1]),
       .dpad_left(cont1_key_s[2]),
       .dpad_right(cont1_key_s[3]),
+
+      // Settings
+      .overscan_enable(overscan_enable_s),
+      .border_enable  (border_enable_s),
+
+      .dotclock_divider(dotclock_divider),
 
       // Data in
       .ioctl_wr(ioctl_wr),
@@ -563,8 +599,29 @@ module core_top (
   reg video_vs_reg;
   reg [23:0] video_rgb_reg;
 
-  assign video_rgb_clock = clk_vid_10_25;
-  assign video_rgb_clock_90 = clk_vid_10_25_90deg;
+  reg current_pix_clk;
+  reg current_pix_clk_90;
+
+  always @(*) begin
+    casex (dotclock_divider)
+      2'b00: begin
+        current_pix_clk <= clk_vid_5_369;
+        current_pix_clk_90 <= clk_vid_5_369_90deg;
+      end
+      2'b01: begin
+        current_pix_clk <= clk_vid_7_159;
+        current_pix_clk_90 <= clk_vid_7_159_90deg;
+      end
+      2'b1X: begin
+        current_pix_clk <= clk_vid_10_738;
+        current_pix_clk_90 <= clk_vid_10_738_90deg;
+      end
+    endcase
+  end
+
+  assign video_rgb_clock = current_pix_clk;
+  assign video_rgb_clock_90 = current_pix_clk_90;
+
   assign video_rgb = video_rgb_reg;
   assign video_de = video_de_reg;
   assign video_skip = 0;
@@ -576,8 +633,13 @@ module core_top (
   reg [2:0] hs_delay;
   reg hs_prev;
   reg vs_prev;
+  reg de_prev;
 
-  always @(posedge clk_vid_10_25) begin
+  wire [1:0] video_slot = dotclock_divider > 1 ? 2 : dotclock_divider;
+
+  wire [23:0] video_slot_rgb = {9'b0, video_slot, 10'b0, 3'b0};
+
+  always @(posedge current_pix_clk) begin
     video_hs_reg  <= 0;
     video_de_reg  <= 0;
     video_rgb_reg <= 24'h0;
@@ -586,6 +648,9 @@ module core_top (
       video_de_reg  <= 1;
 
       video_rgb_reg <= vid_rgb_core;
+    end else if (de_prev && ~de) begin
+      // Last clock was last pixel. Set end of line bits
+      video_rgb_reg <= video_slot_rgb;
     end
 
     if (hs_delay > 0) begin
@@ -597,14 +662,15 @@ module core_top (
     end
 
     if (~hs_prev && video_hs_core) begin
-      // HSync went high. Delay by 6 cycles to prevent overlapping with VSync
-      hs_delay <= 7;
+      // HSync went high. Delay by 6+ vid cycles to prevent overlapping with VSync
+      hs_delay <= 2;
     end
 
     // Set VSync to be high for a single cycle on the rising edge of the VSync coming out of the core
     video_vs_reg <= ~vs_prev && video_vs_core;
     hs_prev <= video_hs_core;
     vs_prev <= video_vs_core;
+    de_prev <= de;
   end
 
   ///////////////////////////////////////////////
@@ -629,8 +695,12 @@ module core_top (
 
   wire clk_mem_85_91;
   wire clk_sys_42_95;
-  wire clk_vid_10_25;
-  wire clk_vid_10_25_90deg;
+  wire clk_vid_10_738;
+  wire clk_vid_10_738_90deg;
+  wire clk_vid_7_159;
+  wire clk_vid_7_159_90deg;
+  wire clk_vid_5_369;
+  wire clk_vid_5_369_90deg;
 
   wire pll_core_locked;
 
@@ -640,8 +710,12 @@ module core_top (
 
       .outclk_0(clk_mem_85_91),
       .outclk_1(clk_sys_42_95),
-      .outclk_2(clk_vid_10_25),
-      .outclk_3(clk_vid_10_25_90deg),
+      .outclk_2(clk_vid_10_738),
+      .outclk_3(clk_vid_10_738_90deg),
+      .outclk_4(clk_vid_7_159),
+      .outclk_5(clk_vid_7_159_90deg),
+      .outclk_6(clk_vid_5_369),
+      .outclk_7(clk_vid_5_369_90deg),
 
       .locked(pll_core_locked)
   );

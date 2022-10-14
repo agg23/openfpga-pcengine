@@ -77,6 +77,7 @@ entity pce_top is
 
 		BORDER_EN	: in  std_logic;
 		ReducedVBL	: in  std_logic;
+		DOTCLOCK_DIVIDER  : out std_logic_vector(1 downto 0);
 		VIDEO_R		: out std_logic_vector(2 downto 0);
 		VIDEO_G		: out std_logic_vector(2 downto 0);
 		VIDEO_B		: out std_logic_vector(2 downto 0);
@@ -302,6 +303,8 @@ CPU_CLKEN <= CPU_CE when rising_edge( CLK );
 VIDEO_CE <= VDC_CLKEN;
 VIDEO_VS <= not VS_N;
 VIDEO_HS <= not HS_N;
+
+DOTCLOCK_DIVIDER <= VCE_DCC;
 
 VCE : entity work.huc6260
 port map(
