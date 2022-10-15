@@ -31,6 +31,7 @@ module pce (
     input wire        cart_download,
 
     // Data out
+    input wire sd_wr,
     input wire [7:0] sd_buff_addr,
     input wire [16:0] sd_lba,
     input wire [15:0] sd_buff_dout,
@@ -694,7 +695,7 @@ module pce (
       // .wren_b(defbram[3] ? bk_int & sd_buff_wr & sd_ack : 1'b1),
       .address_b({sd_lba[1:0], sd_buff_addr}),
       .data_b(sd_buff_dout),
-      .wren_b(bk_int & sd_buff_wr),
+      .wren_b(bk_int & sd_wr),
 
       .q_b(bk_int_dout)
   );

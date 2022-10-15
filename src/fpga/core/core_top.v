@@ -631,8 +631,9 @@ module core_top (
       .cart_download(ioctl_download_s),
 
       // Data out
-      .sd_buff_addr(sd_buff_addr[7:0]),
-      .sd_lba(sd_buff_addr[24:8]),
+      .sd_wr(sd_wr),
+      .sd_buff_addr(sd_buff_addr[8:1]),
+      .sd_lba(sd_buff_addr[24:9]),
       .sd_buff_dout(sd_buff_dout),
       .sd_buff_din(sd_buff_din),
       .save_loading(save_loading_s),
@@ -659,7 +660,6 @@ module core_top (
       .audio_l(audio_l),
       .audio_r(audio_r)
   );
-
 
   ////////////////////////////////////////////////////////////////////////////////////////
 
