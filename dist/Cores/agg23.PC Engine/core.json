@@ -2,13 +2,13 @@
   "core": {
     "magic": "APF_VER_1",
     "metadata": {
-      "platform_ids": ["turbografx"],
-      "shortname": "TurboGrafx16",
-      "description": "APF core template. Displays gray test screen.",
+      "platform_ids": ["pce"],
+      "shortname": "PC Engine",
+      "description": "PC Engine (known as TurboGrafx-16 in the US) by NEC",
       "author": "agg23",
-      "url": "https://github.com/agg23/openfpga-turbografx",
+      "url": "https://github.com/agg23/openfpga-pcengine/",
       "version": "0.1.0",
-      "date_release": "2022-10-12"
+      "date_release": "2022-10-16"
     },
     "framework": {
       "target_product": "Analogue Pocket",
@@ -27,7 +27,7 @@
       {
         "name": "default",
         "id": 0,
-        "filename": "turbografx.rev"
+        "filename": "pce.rev"
       }
     ]
   }

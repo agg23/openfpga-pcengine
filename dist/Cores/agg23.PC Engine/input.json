@@ -1,0 +1,32 @@
+{
+  "input": {
+    "magic": "APF_VER_1",
+    "controllers": [
+      {
+        "type": "default",
+        "mappings": [
+          {
+            "id": 0,
+            "name": "I Button",
+            "key": "pad_btn_a"
+          },
+          {
+            "id": 1,
+            "name": "II Button",
+            "key": "pad_btn_b"
+          },
+          {
+            "id": 20,
+            "name": "Run",
+            "key": "pad_btn_start"
+          },
+          {
+            "id": 21,
+            "name": "Select",
+            "key": "pad_btn_select"
+          }
+        ]
+      }
+    ]
+  }
+}
