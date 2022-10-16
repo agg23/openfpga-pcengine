@@ -3,6 +3,14 @@
     "magic": "APF_VER_1",
     "variables": [
       {
+        "name": "Reset core",
+        "id": 1,
+        "type": "action",
+        "enabled": true,
+        "address": "0x00000050",
+        "value": 1
+      },
+      {
         "name": "Show Overscan",
         "id": 20,
         "type": "check",

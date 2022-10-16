@@ -324,6 +324,10 @@ module core_top (
   end
 
   always @(posedge clk_74a) begin
+    if (reset_delay > 0) begin
+      reset_delay <= reset_delay - 1;
+    end
+
     if (bridge_wr) begin
       casex (bridge_addr)
         // 32'h0: begin
@@ -331,6 +335,9 @@ module core_top (
         // end
         32'h4: begin
           is_sgx <= bridge_wr_data[0];
+        end
+        32'h50: begin
+          reset_delay <= 32'h100000;
         end
         32'h100: begin
           overscan_enable <= bridge_wr_data[0];
@@ -577,9 +584,11 @@ module core_top (
 
   // Settings
 
-  reg  overscan_enable = 0;
-  reg  border_enable = 0;
-  reg  mb128_enable = 0;
+  reg overscan_enable = 0;
+  reg border_enable = 0;
+  reg mb128_enable = 0;
+
+  reg [31:0] reset_delay = 0;
 
   wire overscan_enable_s;
   wire border_enable_s;
@@ -602,7 +611,7 @@ module core_top (
       .clk_sys_42_95(clk_sys_42_95),
       .clk_mem_85_91(clk_mem_85_91),
 
-      .reset_n(reset_n),
+      .core_reset(~reset_n || reset_delay > 0),
       .pll_core_locked(pll_core_locked),
 
       .sgx(is_sgx_s),
@@ -670,10 +679,10 @@ module core_top (
   wire video_vs_core;
   wire [23:0] vid_rgb_core;
 
-  reg video_de_reg;
-  reg video_hs_reg;
-  reg video_vs_reg;
-  reg [23:0] video_rgb_reg;
+  // reg video_de_reg;
+  // reg video_hs_reg;
+  // reg video_vs_reg;
+  // reg [23:0] video_rgb_reg;
 
   reg current_pix_clk;
   reg current_pix_clk_90;
@@ -700,11 +709,13 @@ module core_top (
   assign video_rgb_clock = current_pix_clk;
   assign video_rgb_clock_90 = current_pix_clk_90;
 
-  assign video_rgb = video_rgb_reg;
-  assign video_de = video_de_reg;
+  // If last clock de was high, then was last pixel. Set end of line bits
+  assign video_rgb = de ? vid_rgb_core : de_prev && ~de ? video_slot_rgb : 0;
+  assign video_de = de;
   assign video_skip = 0;
-  assign video_vs = video_vs_reg;
-  assign video_hs = video_hs_reg;
+  // Set VSync to be high for a single cycle on the rising edge of the VSync coming out of the core
+  assign video_vs = ~vs_prev && video_vs_core;
+  assign video_hs = hs_delay == 1;
 
   wire de = ~(h_blank || v_blank);
 
@@ -718,34 +729,15 @@ module core_top (
   wire [23:0] video_slot_rgb = {9'b0, video_slot, 10'b0, 3'b0};
 
   always @(posedge current_pix_clk) begin
-    video_hs_reg  <= 0;
-    video_de_reg  <= 0;
-    video_rgb_reg <= 24'h0;
-
-    if (de) begin
-      video_de_reg  <= 1;
-
-      video_rgb_reg <= vid_rgb_core;
-    end else if (de_prev && ~de) begin
-      // Last clock was last pixel. Set end of line bits
-      video_rgb_reg <= video_slot_rgb;
-    end
-
     if (hs_delay > 0) begin
       hs_delay <= hs_delay - 1;
     end
 
-    if (hs_delay == 1) begin
-      video_hs_reg <= 1;
-    end
-
     if (~hs_prev && video_hs_core) begin
-      // HSync went high. Delay by 6+ vid cycles to prevent overlapping with VSync
-      hs_delay <= 2;
+      // HSync went high. Delay by 6 vid cycles to prevent overlapping with VSync
+      hs_delay <= 6;
     end
 
-    // Set VSync to be high for a single cycle on the rising edge of the VSync coming out of the core
-    video_vs_reg <= ~vs_prev && video_vs_core;
     hs_prev <= video_hs_core;
     vs_prev <= video_vs_core;
     de_prev <= de;

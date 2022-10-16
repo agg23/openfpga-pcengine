@@ -23,9 +23,6 @@ getext r1,r2
 ld r1,#ext_sgx
 test r2,r1
 jp z,set_sgx // Set sgx
-ld r1,#ext_sgx_cap
-test r2,r1
-jp z,set_sgx // Set sgx
 
 dont_set_sgx:
 ld r3,#0
@@ -40,7 +37,7 @@ ld r2,#1 // Downloading start
 pmpw r1,r2 // Write ioctl_download = 1
 
 ld r1,#4 // Set address for write
-pmpw r1,r3 // Write is_sgx = 1r3
+pmpw r1,r3 // Write is_sgx = 1
 
 ld r1,#dataslot
 ld r14,#load_err_msg
@@ -66,9 +63,6 @@ printf r14
 exit 1
 
 ext_sgx:
-db "sgx",0
-
-ext_sgx_cap:
 db "SGX",0
 
 test_err_msg:

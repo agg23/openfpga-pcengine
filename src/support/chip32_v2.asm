@@ -38,7 +38,7 @@ printf r14
 exit 1
 
 ext_sgx:
-db "sgx",0
+db "SGX",0
 
 test_err_msg:
 db "Error",0
