@@ -595,7 +595,7 @@ module core_top (
   wire mb128_enable_s;
 
   synch_3 #(
-      .WIDTH(2)
+      .WIDTH(3)
   ) settings_s (
       {overscan_enable, border_enable, mb128_enable},
       {overscan_enable_s, border_enable_s, mb128_enable_s},
@@ -605,7 +605,9 @@ module core_top (
   wire [15:0] audio_l;
   wire [15:0] audio_r;
 
-  wire [ 1:0] dotclock_divider;
+  wire [1:0] dotclock_divider;
+  wire [6:0] video_hds_register;
+  wire border;
 
   pce pce (
       .clk_sys_42_95(clk_sys_42_95),
@@ -666,6 +668,9 @@ module core_top (
       .video_g(vid_rgb_core[15:8]),
       .video_b(vid_rgb_core[7:0]),
 
+      .hds(video_hds_register),
+      .border(border),
+
       .audio_l(audio_l),
       .audio_r(audio_r)
   );
@@ -717,16 +722,17 @@ module core_top (
   assign video_vs = ~vs_prev && video_vs_core;
   assign video_hs = hs_delay == 1;
 
-  wire de = ~(h_blank || v_blank);
+  wire blanking = h_blank || v_blank;
+  wire de = ~blanking && ~border;
 
-  reg [2:0] hs_delay;
-  reg hs_prev;
-  reg vs_prev;
-  reg de_prev;
+  reg [2:0] hs_delay = 0;
+  reg hs_prev = 0;
+  reg vs_prev = 0;
+  reg de_prev = 0;
 
   wire [1:0] video_slot = dotclock_divider > 1 ? 2 : dotclock_divider;
 
-  wire [23:0] video_slot_rgb = {9'b0, video_slot, 10'b0, 3'b0};
+  wire [23:0] video_slot_rgb = {8'b0, video_slot, overscan_enable_s, 10'b0, 3'b0};
 
   always @(posedge current_pix_clk) begin
     if (hs_delay > 0) begin

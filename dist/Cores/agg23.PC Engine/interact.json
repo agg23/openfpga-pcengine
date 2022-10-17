@@ -11,7 +11,7 @@
         "value": 1
       },
       {
-        "name": "Show Overscan",
+        "name": "Hide Overscan",
         "id": 20,
         "type": "check",
         "enabled": true,

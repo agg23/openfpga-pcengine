@@ -58,6 +58,9 @@ module pce (
     output wire [7:0] video_g,
     output wire [7:0] video_b,
 
+    output wire [6:0] hds,
+    output wire border,
+
     // Audio
     output wire [15:0] audio_l,
     output wire [15:0] audio_r
@@ -188,7 +191,10 @@ module pce (
       .VIDEO_VS(vs),
       .VIDEO_HS(hs),
       .VIDEO_HBL(hbl),
-      .VIDEO_VBL(vbl)
+      .VIDEO_VBL(vbl),
+
+      .HDS(hds),
+      .BORDER_OUT(border)
   );
 
   // CD communication

@@ -3,26 +3,50 @@
     "magic": "APF_VER_1",
     "scaler_modes": [
       {
-        "width": 520,
+        "width": 512,
         "height": 240,
-        "aspect_w": 4,
-        "aspect_h": 3,
+        "aspect_w": 16,
+        "aspect_h": 15,
         "rotation": 0,
         "mirror": 0
       },
       {
-        "width": 360,
-        "height": 240,
-        "aspect_w": 4,
-        "aspect_h": 3,
+        "width": 512,
+        "height": 224,
+        "aspect_w": 8,
+        "aspect_h": 7,
         "rotation": 0,
         "mirror": 0
       },
       {
-        "width": 520,
+        "width": 352,
         "height": 240,
-        "aspect_w": 4,
-        "aspect_h": 3,
+        "aspect_w": 16,
+        "aspect_h": 15,
+        "rotation": 0,
+        "mirror": 0
+      },
+      {
+        "width": 352,
+        "height": 224,
+        "aspect_w": 8,
+        "aspect_h": 7,
+        "rotation": 0,
+        "mirror": 0
+      },
+      {
+        "width": 512,
+        "height": 240,
+        "aspect_w": 16,
+        "aspect_h": 15,
+        "rotation": 0,
+        "mirror": 0
+      },
+      {
+        "width": 512,
+        "height": 224,
+        "aspect_w": 8,
+        "aspect_h": 7,
         "rotation": 0,
         "mirror": 0
       }
