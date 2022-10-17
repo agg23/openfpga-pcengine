@@ -19,7 +19,6 @@ module pce (
 
     // Settings
     input wire overscan_enable,
-    input wire border_enable,
     input wire mb128_enable,
 
     output wire [1:0] dotclock_divider,
@@ -180,7 +179,7 @@ module pce (
       .CPU_PAUSE_EN(CPU_PAUSE_EN),
 
       .ReducedVBL(~overscan_enable),
-      .BORDER_EN(border_enable),
+      .BORDER_EN(0),
       .DOTCLOCK_DIVIDER(dotclock_divider),
       .VIDEO_R(r),
       .VIDEO_G(g),

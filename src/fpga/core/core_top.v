@@ -342,9 +342,6 @@ module core_top (
         32'h100: begin
           overscan_enable <= bridge_wr_data[0];
         end
-        32'h104: begin
-          border_enable <= bridge_wr_data[0];
-        end
         // 32'h200: begin
         //   mb128_enable <= bridge_wr_data[0];
         // end
@@ -585,20 +582,18 @@ module core_top (
   // Settings
 
   reg overscan_enable = 0;
-  reg border_enable = 0;
   reg mb128_enable = 0;
 
   reg [31:0] reset_delay = 0;
 
   wire overscan_enable_s;
-  wire border_enable_s;
   wire mb128_enable_s;
 
   synch_3 #(
-      .WIDTH(3)
+      .WIDTH(2)
   ) settings_s (
-      {overscan_enable, border_enable, mb128_enable},
-      {overscan_enable_s, border_enable_s, mb128_enable_s},
+      {overscan_enable, mb128_enable},
+      {overscan_enable_s, mb128_enable_s},
       clk_sys_42_95
   );
 
@@ -630,7 +625,6 @@ module core_top (
 
       // Settings
       .overscan_enable(overscan_enable_s),
-      .border_enable(border_enable_s),
       .mb128_enable(mb128_enable_s),
 
       .dotclock_divider(dotclock_divider),
@@ -711,30 +705,76 @@ module core_top (
     endcase
   end
 
+  // If not 352, both 256 and 512 have the same number of clocks (256 is doubled)
+  wire [9:0] expected_line_width = dotclock_divider == 2'b01 ? 10'd352 : 10'd512;
+
   assign video_rgb_clock = current_pix_clk;
   assign video_rgb_clock_90 = current_pix_clk_90;
 
   // If last clock de was high, then was last pixel. Set end of line bits
-  assign video_rgb = de ? vid_rgb_core : de_prev && ~de ? video_slot_rgb : 0;
-  assign video_de = de;
+  assign video_rgb = de ? vid_rgb_core : expanded_de_prev && ~expanded_de ? video_slot_rgb : 0;
+  assign video_de = expanded_de;
   assign video_skip = 0;
   // Set VSync to be high for a single cycle on the rising edge of the VSync coming out of the core
   assign video_vs = ~vs_prev && video_vs_core;
   assign video_hs = hs_delay == 1;
 
-  wire blanking = h_blank || v_blank;
-  wire de = ~blanking && ~border;
+  wire [8:0] expected_line_count = overscan_enable_s ? 224 : 240;
+
+  wire de = ~h_blank && ~v_blank && ~(border_delay > 0);
+
+  // Customize h_blank to only occur if we've met the line width requirements
+  wire expanded_h_blank = h_blank && ~(line_started && pixel_count < expected_line_width);
+
+  // Customize v_blank to only occur if we've met the line count requirements
+  wire expanded_v_blank = v_blank && ~(frame_started && line_count < 240);
+
+  wire expanded_border = border_delay > 0 && pixel_count < 24;
+
+  // Force DE to remain high if the pixel count for this line, or the line count for this frame hasn't been met
+  wire expanded_de = ~expanded_h_blank && ~expanded_v_blank && ~expanded_border && pixel_count < expected_line_width && line_count < expected_line_count;
 
   reg [2:0] hs_delay = 0;
   reg hs_prev = 0;
   reg vs_prev = 0;
-  reg de_prev = 0;
+  reg expanded_de_prev = 0;
+  reg line_started = 0;
+  reg frame_started = 0;
+  reg [2:0] border_delay = 0;
+
+  reg [9:0] pixel_count = 0;
+  reg [8:0] line_count = 0;
 
   wire [1:0] video_slot = dotclock_divider > 1 ? 2 : dotclock_divider;
 
   wire [23:0] video_slot_rgb = {8'b0, video_slot, overscan_enable_s, 10'b0, 3'b0};
 
   always @(posedge current_pix_clk) begin
+    if (video_vs_core && ~vs_prev) begin
+      line_count <= 0;
+      frame_started <= 0;
+    end
+
+    if (video_hs_core && ~hs_prev) begin
+      pixel_count  <= 0;
+      line_started <= 0;
+
+      if (frame_started) begin
+        line_count <= line_count + 1;
+      end
+    end else if (de || line_started) begin
+      pixel_count   <= pixel_count + 1;
+      line_started  <= 1;
+      frame_started <= 1;
+    end
+
+    // Border goes low 4 pixels before finishing the border area for some reason
+    if (border) begin
+      border_delay <= 4;
+    end else if (border_delay > 0) begin
+      border_delay <= border_delay - 1;
+    end
+
     if (hs_delay > 0) begin
       hs_delay <= hs_delay - 1;
     end
@@ -746,7 +786,7 @@ module core_top (
 
     hs_prev <= video_hs_core;
     vs_prev <= video_vs_core;
-    de_prev <= de;
+    expanded_de_prev <= expanded_de;
   end
 
   ///////////////////////////////////////////////

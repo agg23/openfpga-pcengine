@@ -18,18 +18,7 @@
         "address": "0x00000100",
         "persist": true,
         "writeonly": true,
-        "defaultval": 0,
-        "value": 1
-      },
-      {
-        "name": "Show borders",
-        "id": 21,
-        "type": "check",
-        "enabled": true,
-        "address": "0x00000104",
-        "persist": true,
-        "writeonly": true,
-        "defaultval": 0,
+        "defaultval": 1,
         "value": 1
       }
     ],
