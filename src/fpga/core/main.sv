@@ -6,19 +6,48 @@ module pce (
     input wire pll_core_locked,
 
     // Input
-    input wire button_a,
-    input wire button_b,
-    input wire button_select,
-    input wire button_start,
-    input wire dpad_up,
-    input wire dpad_down,
-    input wire dpad_left,
-    input wire dpad_right,
+    input wire p1_button_a,
+    input wire p1_button_b,
+    input wire p1_button_select,
+    input wire p1_button_start,
+    input wire p1_dpad_up,
+    input wire p1_dpad_down,
+    input wire p1_dpad_left,
+    input wire p1_dpad_right,
+
+    input wire p2_button_a,
+    input wire p2_button_b,
+    input wire p2_button_select,
+    input wire p2_button_start,
+    input wire p2_dpad_up,
+    input wire p2_dpad_down,
+    input wire p2_dpad_left,
+    input wire p2_dpad_right,
+
+    input wire p3_button_a,
+    input wire p3_button_b,
+    input wire p3_button_select,
+    input wire p3_button_start,
+    input wire p3_dpad_up,
+    input wire p3_dpad_down,
+    input wire p3_dpad_left,
+    input wire p3_dpad_right,
+
+    input wire p4_button_a,
+    input wire p4_button_b,
+    input wire p4_button_select,
+    input wire p4_button_start,
+    input wire p4_dpad_up,
+    input wire p4_dpad_down,
+    input wire p4_dpad_left,
+    input wire p4_dpad_right,
 
     input wire sgx,
 
     // Settings
+    input wire turbo_tap_enable,
     input wire overscan_enable,
+    input wire extra_sprites_enable,
     input wire mb128_enable,
 
     output wire [1:0] dotclock_divider,
@@ -133,14 +162,15 @@ module pce (
       .GG_RESET((cart_download | code_download) & ioctl_wr & !ioctl_addr),
       .GG_AVAIL(gg_avail),
 
-      .SP64(status[11]),
+      .SP64(extra_sprites_enable),
       .SGX (sgx && !LITE),
 
       .JOY_OUT(joy_out),
       .JOY_IN (joy_in),
 
       .CD_EN(cd_en),
-      .AC_EN(status[14]),
+      // Arcade card
+      .AC_EN(0),
 
       // .CD_RAM_A (cd_ram_a),
       // .CD_RAM_DO(cd_ram_do),
@@ -523,19 +553,61 @@ module pce (
     1'b0,
     1'b0,
     1'b0,
-    button_start,
-    button_select,
-    button_b,
-    button_a,
-    dpad_up,
-    dpad_down,
-    dpad_left,
-    dpad_right
+    p1_button_start,
+    p1_button_select,
+    p1_button_b,
+    p1_button_a,
+    p1_dpad_up,
+    p1_dpad_down,
+    p1_dpad_left,
+    p1_dpad_right
   };
 
-  wire [11:0] joy_1 = 0;
-  wire [11:0] joy_2 = 0;
-  wire [11:0] joy_3 = 0;
+  wire [11:0] joy_1 = {
+    1'b0,
+    1'b0,
+    1'b0,
+    1'b0,
+    p2_button_start,
+    p2_button_select,
+    p2_button_b,
+    p2_button_a,
+    p2_dpad_up,
+    p2_dpad_down,
+    p2_dpad_left,
+    p2_dpad_right
+  };
+
+  wire [11:0] joy_2 = {
+    1'b0,
+    1'b0,
+    1'b0,
+    1'b0,
+    p3_button_start,
+    p3_button_select,
+    p3_button_b,
+    p3_button_a,
+    p3_dpad_up,
+    p3_dpad_down,
+    p3_dpad_left,
+    p3_dpad_right
+  };
+
+  wire [11:0] joy_3 = {
+    1'b0,
+    1'b0,
+    1'b0,
+    1'b0,
+    p4_button_start,
+    p4_button_select,
+    p4_button_b,
+    p4_button_a,
+    p4_dpad_up,
+    p4_dpad_down,
+    p4_dpad_left,
+    p4_dpad_right
+  };
+
   wire [11:0] joy_4 = 0;
 
   wire [15:0] joy_data;
@@ -632,7 +704,7 @@ module pce (
         if (~last_gp[1]) high_buttons <= ~high_buttons && status[4];
       end
     end
-	else if (joy_out[0] && ~last_gp[0] && (status[2] | status[27]) && (status[27:26] != 2'b11)) begin	// suppress if XE-1AP
+	else if (joy_out[0] && ~last_gp[0] && (turbo_tap_enable | status[27]) && (status[27:26] != 2'b11)) begin	// suppress if XE-1AP
       joy_port <= joy_port + 3'd1;
     end
   end
