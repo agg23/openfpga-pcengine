@@ -803,15 +803,24 @@ module core_top (
   reg [2:0] hs_delay = 0;
   reg hs_prev = 0;
   reg vs_prev = 0;
+  reg de_prev = 0;
   reg expanded_de_prev = 0;
   reg line_started = 0;
   reg frame_started = 0;
   reg [2:0] border_delay = 0;
 
   reg [9:0] pixel_count = 0;
+  reg [9:0] max_pixel_count = 0;
   reg [8:0] line_count = 0;
 
-  wire [1:0] video_slot = dotclock_divider > 1 ? 2 : dotclock_divider;
+  // wire [1:0] video_slot = dotclock_divider > 1 ? 2 : dotclock_divider;
+  wire [1:0] video_slot = max_pixel_count > 480 ? 0 :
+  // 352
+  max_pixel_count > 330 ? 2 :
+  // 320
+  max_pixel_count > 280 ? 1 :
+  // 256
+  0;
 
   wire [23:0] video_slot_rgb = {8'b0, video_slot, overscan_enable_s, 10'b0, 3'b0};
 
@@ -822,8 +831,9 @@ module core_top (
     end
 
     if (video_hs_core && ~hs_prev) begin
-      pixel_count  <= 0;
+      pixel_count <= 0;
       line_started <= 0;
+      max_pixel_count <= 0;
 
       if (frame_started) begin
         line_count <= line_count + 1;
@@ -832,6 +842,12 @@ module core_top (
       pixel_count   <= pixel_count + 1;
       line_started  <= 1;
       frame_started <= 1;
+    end
+
+    if (~de && de_prev) begin
+      if (pixel_count > max_pixel_count) begin
+        max_pixel_count <= pixel_count;
+      end
     end
 
     // Border goes low 4 pixels before finishing the border area for some reason
@@ -852,6 +868,7 @@ module core_top (
 
     hs_prev <= video_hs_core;
     vs_prev <= video_vs_core;
+    de_prev <= de;
     expanded_de_prev <= expanded_de;
   end
 
