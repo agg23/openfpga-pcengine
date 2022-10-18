@@ -5,16 +5,16 @@
       {
         "width": 512,
         "height": 240,
-        "aspect_w": 16,
-        "aspect_h": 15,
+        "aspect_w": 2048,
+        "aspect_h": 1673,
         "rotation": 0,
         "mirror": 0
       },
       {
         "width": 512,
         "height": 224,
-        "aspect_w": 8,
-        "aspect_h": 7,
+        "aspect_w": 256,
+        "aspect_h": 195,
         "rotation": 0,
         "mirror": 0
       },
@@ -37,16 +37,16 @@
       {
         "width": 352,
         "height": 240,
-        "aspect_w": 16,
-        "aspect_h": 15,
+        "aspect_w": 1961,
+        "aspect_h": 2134,
         "rotation": 0,
         "mirror": 0
       },
       {
         "width": 352,
         "height": 224,
-        "aspect_w": 8,
-        "aspect_h": 7,
+        "aspect_w": 1961,
+        "aspect_h": 1992,
         "rotation": 0,
         "mirror": 0
       }

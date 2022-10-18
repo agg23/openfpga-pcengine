@@ -835,16 +835,19 @@ module core_top (
       line_started <= 0;
       max_pixel_count <= 0;
 
+      // Keep track of the lines in the frame (number of hsyncs)
       if (frame_started) begin
         line_count <= line_count + 1;
       end
     end else if (de || line_started) begin
+      // Once DE is asserted for the first time, count the pixels we render
       pixel_count   <= pixel_count + 1;
       line_started  <= 1;
       frame_started <= 1;
     end
 
     if (~de && de_prev) begin
+      // Keep a running tally of the max pixels in each line. We use this to decide which video mode we're in
       if (pixel_count > max_pixel_count) begin
         max_pixel_count <= pixel_count;
       end
@@ -898,8 +901,6 @@ module core_top (
   wire clk_vid_10_738_90deg;
   wire clk_vid_7_159;
   wire clk_vid_7_159_90deg;
-  // wire clk_vid_5_369;
-  // wire clk_vid_5_369_90deg;
 
   wire pll_core_locked;
 
@@ -913,8 +914,6 @@ module core_top (
       .outclk_3(clk_vid_10_738_90deg),
       .outclk_4(clk_vid_7_159),
       .outclk_5(clk_vid_7_159_90deg),
-      // .outclk_6(clk_vid_5_369),
-      // .outclk_7(clk_vid_5_369_90deg),
 
       .locked(pll_core_locked)
   );
