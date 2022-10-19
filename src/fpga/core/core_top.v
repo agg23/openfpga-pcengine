@@ -820,7 +820,10 @@ module core_top (
   // Customize v_blank to only occur if we've met the line count requirements
   wire expanded_v_blank = v_blank && ~(frame_started && line_count < 240);
 
-  wire expanded_border = border_delay > 0 && pixel_count < 24;
+  // If we have a border delay (number of pixels from border low), a pixel count below 24, and a total number of pixel clocks
+  // since hsync under 160, we're in border.
+  // If number of pixel clocks since hsync exceeds 160, we are obviously out of border and we might need to draw an empty line to match the scaler's height
+  wire expanded_border = border_delay > 0 && pixel_count < 24 && pixel_cycle_count < 160;
 
   // Force DE to remain high if the pixel count for this line, or the line count for this frame hasn't been met
   wire expanded_de = ~expanded_h_blank && ~expanded_v_blank && ~expanded_border && pixel_count < expected_line_width && line_count < expected_line_count;
@@ -835,6 +838,7 @@ module core_top (
   reg [2:0] border_delay = 0;
 
   reg [9:0] pixel_count = 0;
+  reg [9:0] pixel_cycle_count = 0;
   reg [9:0] max_pixel_count = 0;
   reg [8:0] line_count = 0;
 
@@ -854,7 +858,11 @@ module core_top (
       frame_started <= 0;
     end
 
+    // Count number of pixel cycles, not necessarily drawn ones
+    pixel_cycle_count <= pixel_cycle_count + 1;
+
     if (video_hs_core && ~hs_prev) begin
+      pixel_cycle_count <= 0;
       pixel_count <= 0;
       line_started <= 0;
       max_pixel_count <= 0;
@@ -863,7 +871,7 @@ module core_top (
       if (frame_started) begin
         line_count <= line_count + 1;
       end
-    end else if (de || line_started) begin
+    end else if (expanded_de || line_started) begin
       // Once DE is asserted for the first time, count the pixels we render
       pixel_count   <= pixel_count + 1;
       line_started  <= 1;
