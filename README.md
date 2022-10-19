@@ -33,3 +33,10 @@ There are several options provided for tweaking the displayed video:
 
 * `Hide Overscan` - Adjusts the top and bottom of the video to mask lines that would normally be masked by the CRT. Adjusts the aspect ratio to correspond with this modification
 * `Extra Sprites` - Allows extra sprites to be displayed on each line. Will decrease flickering in some games
+
+## Licensing
+
+All source included in this project from me or the [MiSTer project](https://github.com/MiSTer-devel/TurboGrafx16_MiSTer) is licensed as GPLv2, unless otherwise noted. The original source for [FPGAPCE](https://github.com/Torlus/FPGAPCE), the project this core is based off of, is [public domain](https://twitter.com/Torlus/status/1582663978068893696). The contents of the public domain tweet are reproduced here:
+
+> Indeed. The main reason why I haven't provided a license is that I didn't know how to deal with the different licenses attached to parts of the cores.
+Anyway, consider *my own* source code as public domain, i.e do what you want with it, for any use you want. (1/2)
