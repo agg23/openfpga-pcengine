@@ -44,3 +44,7 @@ All source included in this project from me or the [MiSTer project](https://gith
 
 > Indeed. The main reason why I haven't provided a license is that I didn't know how to deal with the different licenses attached to parts of the cores.
 Anyway, consider *my own* source code as public domain, i.e do what you want with it, for any use you want. (1/2)
+
+[Additionally, he wrote](https://twitter.com/Torlus/status/1582664299973341184):
+
+> If stated otherwise in the comments at the beginning of a given source file, the license attached prevails. That applies to my FPGAPCE project (https://github.com/Torlus/FPGAPCE).
