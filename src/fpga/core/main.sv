@@ -6,8 +6,12 @@ module pce (
     input wire pll_core_locked,
 
     // Input
-    input wire p1_button_a,
-    input wire p1_button_b,
+    input wire p1_button_1,
+    input wire p1_button_2,
+    input wire p1_button_3,
+    input wire p1_button_4,
+    input wire p1_button_5,
+    input wire p1_button_6,
     input wire p1_button_select,
     input wire p1_button_start,
     input wire p1_dpad_up,
@@ -15,8 +19,12 @@ module pce (
     input wire p1_dpad_left,
     input wire p1_dpad_right,
 
-    input wire p2_button_a,
-    input wire p2_button_b,
+    input wire p2_button_1,
+    input wire p2_button_2,
+    input wire p2_button_3,
+    input wire p2_button_4,
+    input wire p2_button_5,
+    input wire p2_button_6,
     input wire p2_button_select,
     input wire p2_button_start,
     input wire p2_dpad_up,
@@ -24,8 +32,12 @@ module pce (
     input wire p2_dpad_left,
     input wire p2_dpad_right,
 
-    input wire p3_button_a,
-    input wire p3_button_b,
+    input wire p3_button_1,
+    input wire p3_button_2,
+    input wire p3_button_3,
+    input wire p3_button_4,
+    input wire p3_button_5,
+    input wire p3_button_6,
     input wire p3_button_select,
     input wire p3_button_start,
     input wire p3_dpad_up,
@@ -33,8 +45,12 @@ module pce (
     input wire p3_dpad_left,
     input wire p3_dpad_right,
 
-    input wire p4_button_a,
-    input wire p4_button_b,
+    input wire p4_button_1,
+    input wire p4_button_2,
+    input wire p4_button_3,
+    input wire p4_button_4,
+    input wire p4_button_5,
+    input wire p4_button_6,
     input wire p4_button_select,
     input wire p4_button_start,
     input wire p4_dpad_up,
@@ -46,11 +62,10 @@ module pce (
 
     // Settings
     input wire turbo_tap_enable,
+    input wire button6_enable,
     input wire overscan_enable,
     input wire extra_sprites_enable,
     input wire mb128_enable,
-
-    output wire [1:0] dotclock_divider,
 
     // Data in
     input wire        ioctl_wr,
@@ -86,7 +101,7 @@ module pce (
     output wire [7:0] video_g,
     output wire [7:0] video_b,
 
-    output wire [6:0] hds,
+    output wire [1:0] dotclock_divider,
     output wire border,
 
     // Audio
@@ -222,7 +237,6 @@ module pce (
       .VIDEO_HBL(hbl),
       .VIDEO_VBL(vbl),
 
-      .HDS(hds),
       .BORDER_OUT(border)
   );
 
@@ -549,14 +563,14 @@ module pce (
   ////////////////////////////  INPUT  ///////////////////////////////////
 
   wire [11:0] joy_0 = {
-    1'b0,
-    1'b0,
-    1'b0,
-    1'b0,
+    p1_button_6,
+    p1_button_5,
+    p1_button_4,
+    p1_button_3,
     p1_button_start,
     p1_button_select,
-    p1_button_b,
-    p1_button_a,
+    p1_button_2,
+    p1_button_1,
     p1_dpad_up,
     p1_dpad_down,
     p1_dpad_left,
@@ -564,14 +578,14 @@ module pce (
   };
 
   wire [11:0] joy_1 = {
-    1'b0,
-    1'b0,
-    1'b0,
-    1'b0,
+    p2_button_6,
+    p2_button_5,
+    p2_button_4,
+    p2_button_3,
     p2_button_start,
     p2_button_select,
-    p2_button_b,
-    p2_button_a,
+    p2_button_2,
+    p2_button_1,
     p2_dpad_up,
     p2_dpad_down,
     p2_dpad_left,
@@ -579,14 +593,14 @@ module pce (
   };
 
   wire [11:0] joy_2 = {
-    1'b0,
-    1'b0,
-    1'b0,
-    1'b0,
+    p3_button_6,
+    p3_button_5,
+    p3_button_4,
+    p3_button_3,
     p3_button_start,
     p3_button_select,
-    p3_button_b,
-    p3_button_a,
+    p3_button_2,
+    p3_button_1,
     p3_dpad_up,
     p3_dpad_down,
     p3_dpad_left,
@@ -594,14 +608,14 @@ module pce (
   };
 
   wire [11:0] joy_3 = {
-    1'b0,
-    1'b0,
-    1'b0,
-    1'b0,
+    p4_button_6,
+    p4_button_5,
+    p4_button_4,
+    p4_button_3,
     p4_button_start,
     p4_button_select,
-    p4_button_b,
-    p4_button_a,
+    p4_button_2,
+    p4_button_1,
     p4_dpad_up,
     p4_dpad_down,
     p4_dpad_left,
@@ -701,7 +715,7 @@ module pce (
       joy_port <= 0;
       if (status[27:26] != 2'b11) begin
         joy_latch <= 0;
-        if (~last_gp[1]) high_buttons <= ~high_buttons && status[4];
+        if (~last_gp[1]) high_buttons <= ~high_buttons && button6_enable;
       end
     end
 	else if (joy_out[0] && ~last_gp[0] && (turbo_tap_enable | status[27]) && (status[27:26] != 2'b11)) begin	// suppress if XE-1AP

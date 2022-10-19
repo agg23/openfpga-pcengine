@@ -89,7 +89,6 @@ entity pce_top is
 		VIDEO_HBL	: out std_logic;
 		VIDEO_VBL	: out std_logic;
 
-		HDS : out std_logic_vector(6 downto 0);
 		BORDER_OUT : out std_logic
 	);
 end pce_top;
@@ -388,9 +387,7 @@ port map(
 	RAM_WE	=> VRAM0_WE,
 	
 	BG_EN		=> BG_EN,
-	SPR_EN	=> SPR_EN,
-
-	HDS_DBG => HDS
+	SPR_EN	=> SPR_EN
 );
 
 VRAM0 : entity work.dpram generic map (addr_width => 15, data_width => 16, disable_value => '0')

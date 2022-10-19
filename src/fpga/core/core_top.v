@@ -342,6 +342,9 @@ module core_top (
         32'h100: begin
           turbo_tap_enable <= bridge_wr_data[0];
         end
+        32'h104: begin
+          button6_enable <= bridge_wr_data[0];
+        end
         32'h200: begin
           overscan_enable <= bridge_wr_data[0];
         end
@@ -615,6 +618,7 @@ module core_top (
   // Settings
 
   reg turbo_tap_enable = 0;
+  reg button6_enable = 0;
   reg overscan_enable = 0;
   reg extra_sprites_enable = 0;
   reg mb128_enable = 0;
@@ -622,15 +626,22 @@ module core_top (
   reg [31:0] reset_delay = 0;
 
   wire turbo_tap_enable_s;
+  wire button6_enable_s;
   wire overscan_enable_s;
   wire extra_sprites_enable_s;
   wire mb128_enable_s;
 
   synch_3 #(
-      .WIDTH(4)
+      .WIDTH(5)
   ) settings_s (
-      {turbo_tap_enable, overscan_enable, extra_sprites_enable, mb128_enable},
-      {turbo_tap_enable_s, overscan_enable_s, extra_sprites_enable_s, mb128_enable_s},
+      {turbo_tap_enable, button6_enable, overscan_enable, extra_sprites_enable, mb128_enable},
+      {
+        turbo_tap_enable_s,
+        button6_enable_s,
+        overscan_enable_s,
+        extra_sprites_enable_s,
+        mb128_enable_s
+      },
       clk_sys_42_95
   );
 
@@ -638,7 +649,6 @@ module core_top (
   wire [15:0] audio_r;
 
   wire [1:0] dotclock_divider;
-  wire [6:0] video_hds_register;
   wire border;
 
   pce pce (
@@ -651,8 +661,12 @@ module core_top (
       .sgx(is_sgx_s),
 
       // Input
-      .p1_button_a(cont1_key_s[4]),
-      .p1_button_b(cont1_key_s[5]),
+      .p1_button_1(cont1_key_s[4]),
+      .p1_button_2(cont1_key_s[5]),
+      .p1_button_3(cont1_key_s[6]),
+      .p1_button_4(cont1_key_s[7]),
+      .p1_button_5(cont1_key_s[8]),
+      .p1_button_6(cont1_key_s[9]),
       .p1_button_select(cont1_key_s[14]),
       .p1_button_start(cont1_key_s[15]),
       .p1_dpad_up(cont1_key_s[0]),
@@ -660,8 +674,12 @@ module core_top (
       .p1_dpad_left(cont1_key_s[2]),
       .p1_dpad_right(cont1_key_s[3]),
 
-      .p2_button_a(cont2_key_s[4]),
-      .p2_button_b(cont2_key_s[5]),
+      .p2_button_1(cont2_key_s[4]),
+      .p2_button_2(cont2_key_s[5]),
+      .p2_button_3(cont2_key_s[6]),
+      .p2_button_4(cont2_key_s[7]),
+      .p2_button_5(cont2_key_s[8]),
+      .p2_button_6(cont2_key_s[9]),
       .p2_button_select(cont2_key_s[14]),
       .p2_button_start(cont2_key_s[15]),
       .p2_dpad_up(cont2_key_s[0]),
@@ -669,8 +687,12 @@ module core_top (
       .p2_dpad_left(cont2_key_s[2]),
       .p2_dpad_right(cont2_key_s[3]),
 
-      .p3_button_a(cont3_key_s[4]),
-      .p3_button_b(cont3_key_s[5]),
+      .p3_button_1(cont3_key_s[4]),
+      .p3_button_2(cont3_key_s[5]),
+      .p3_button_3(cont3_key_s[6]),
+      .p3_button_4(cont3_key_s[7]),
+      .p3_button_5(cont3_key_s[8]),
+      .p3_button_6(cont3_key_s[9]),
       .p3_button_select(cont3_key_s[14]),
       .p3_button_start(cont3_key_s[15]),
       .p3_dpad_up(cont3_key_s[0]),
@@ -678,8 +700,12 @@ module core_top (
       .p3_dpad_left(cont3_key_s[2]),
       .p3_dpad_right(cont3_key_s[3]),
 
-      .p4_button_a(cont4_key_s[4]),
-      .p4_button_b(cont4_key_s[5]),
+      .p4_button_1(cont4_key_s[4]),
+      .p4_button_2(cont4_key_s[5]),
+      .p4_button_3(cont4_key_s[6]),
+      .p4_button_4(cont4_key_s[7]),
+      .p4_button_5(cont4_key_s[8]),
+      .p4_button_6(cont4_key_s[9]),
       .p4_button_select(cont4_key_s[14]),
       .p4_button_start(cont4_key_s[15]),
       .p4_dpad_up(cont4_key_s[0]),
@@ -689,11 +715,10 @@ module core_top (
 
       // Settings
       .turbo_tap_enable(turbo_tap_enable_s),
+      .button6_enable(button6_enable_s),
       .overscan_enable(overscan_enable_s),
       .extra_sprites_enable(extra_sprites_enable_s),
       .mb128_enable(mb128_enable_s),
-
-      .dotclock_divider(dotclock_divider),
 
       // Data in
       .ioctl_wr(ioctl_wr),
@@ -728,7 +753,7 @@ module core_top (
       .video_g(vid_rgb_core[15:8]),
       .video_b(vid_rgb_core[7:0]),
 
-      .hds(video_hds_register),
+      .dotclock_divider(dotclock_divider),
       .border(border),
 
       .audio_l(audio_l),
@@ -813,7 +838,6 @@ module core_top (
   reg [9:0] max_pixel_count = 0;
   reg [8:0] line_count = 0;
 
-  // wire [1:0] video_slot = dotclock_divider > 1 ? 2 : dotclock_divider;
   wire [1:0] video_slot = max_pixel_count > 380 ? 0 :
   // 352
   max_pixel_count > 330 ? 2 :

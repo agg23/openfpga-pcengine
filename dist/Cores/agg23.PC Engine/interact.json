@@ -22,6 +22,17 @@
         "value": 1
       },
       {
+        "name": "Use 6 Button Cont",
+        "id": 21,
+        "type": "check",
+        "enabled": true,
+        "address": "0x00000104",
+        "persist": true,
+        "writeonly": true,
+        "defaultval": 0,
+        "value": 1
+      },
+      {
         "name": "Hide Overscan",
         "id": 40,
         "type": "check",

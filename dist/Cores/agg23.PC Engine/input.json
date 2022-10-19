@@ -16,6 +16,26 @@
             "key": "pad_btn_b"
           },
           {
+            "id": 2,
+            "name": "III Button",
+            "key": "pad_btn_x"
+          },
+          {
+            "id": 3,
+            "name": "IV Button",
+            "key": "pad_btn_y"
+          },
+          {
+            "id": 4,
+            "name": "V Button",
+            "key": "pad_trig_l"
+          },
+          {
+            "id": 5,
+            "name": "VI Button",
+            "key": "pad_trig_r"
+          },
+          {
             "id": 20,
             "name": "Run",
             "key": "pad_btn_start"
