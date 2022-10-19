@@ -814,7 +814,7 @@ module core_top (
   reg [8:0] line_count = 0;
 
   // wire [1:0] video_slot = dotclock_divider > 1 ? 2 : dotclock_divider;
-  wire [1:0] video_slot = max_pixel_count > 480 ? 0 :
+  wire [1:0] video_slot = max_pixel_count > 380 ? 0 :
   // 352
   max_pixel_count > 330 ? 2 :
   // 320
