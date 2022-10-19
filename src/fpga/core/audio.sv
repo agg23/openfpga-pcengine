@@ -1,6 +1,11 @@
 module pce_audio (
     input wire clk_sys_42_95,
 
+    // Settings
+    input wire cd_audio_boost,
+    input wire adpcm_audio_boost,
+    input wire [1:0] master_audio_boost,
+
     input wire [15:0] cdda_sl,
     input wire [15:0] cdda_sr,
     input wire [15:0] adpcm_s,
@@ -10,10 +15,6 @@ module pce_audio (
     output wire [15:0] audio_l,
     output wire [15:0] audio_r
 );
-
-  // TODO: Status
-  wire [63:0] status = 0;
-
   wire PSG_EN = 1;
   wire CDDA_EN = 1;
   wire ADPCM_EN = 1;
@@ -35,7 +36,7 @@ module pce_audio (
       v = inp[15] ? (~inp) + 1'd1 : inp;
       v1 = (v < comp_x1[15:0]) ? (v * comp_a1) : (((v - comp_x1[15:0]) / comp_f1) + comp_b1[15:0]);
       v2 = (v < comp_x2[15:0]) ? (v * comp_a2) : (((v - comp_x2[15:0]) / comp_f2) + comp_b2[15:0]);
-      v = status[19] ? v2 : v1;
+      v = master_audio_boost[1] ? v2 : v1;
       compr = inp[15] ? ~(v - 1'd1) : v;
     end
   endfunction
@@ -98,20 +99,20 @@ module pce_audio (
     adpcm_boost <= $signed(
         {adpcm_filt[15], adpcm_filt}
     ) + $signed(
-        (status[22] ? {{3{adpcm_filt[15]}}, adpcm_filt[15:2]} : 17'd0)
+        (adpcm_audio_boost ? {{3{adpcm_filt[15]}}, adpcm_filt[15:2]} : 17'd0)
     );
 
     pre_l <= ( CDDA_EN                  ? {{2{cdda_sl[15]}},         cdda_sl} : 18'd0)
-			 + ((CDDA_EN && status[20]) ? {{2{cdda_sl[15]}},         cdda_sl} : 18'd0)
+			 + ((CDDA_EN && cd_audio_boost) ? {{2{cdda_sl[15]}},         cdda_sl} : 18'd0)
 			 + ( PSG_EN                 ? {{2{psg_l_filt[15]}},   psg_l_filt} : 18'd0)
 			 + ( ADPCM_EN               ? {adpcm_boost[16],   adpcm_boost} : 18'd0);
 
     pre_r <= ( CDDA_EN                  ? {{2{cdda_sr[15]}},         cdda_sr} : 18'd0)
-			 + ((CDDA_EN && status[20]) ? {{2{cdda_sr[15]}},         cdda_sr} : 18'd0)
+			 + ((CDDA_EN && cd_audio_boost) ? {{2{cdda_sr[15]}},         cdda_sr} : 18'd0)
 			 + ( PSG_EN                 ? {{2{psg_r_filt[15]}},   psg_r_filt} : 18'd0)
 			 + ( ADPCM_EN               ? {adpcm_boost[16],   adpcm_boost} : 18'd0);
 
-    if (~status[20]) begin
+    if (~cd_audio_boost) begin
       // 3/4 + 1/4 to cover the whole range.
       audio_l_int <= $signed(pre_l) + ($signed(pre_l) >>> 2);
       audio_r_int <= $signed(pre_r) + ($signed(pre_r) >>> 2);
@@ -124,7 +125,7 @@ module pce_audio (
     cmp_r <= compr(audio_r_int[17:2]);
   end
 
-  assign audio_l = status[19:18] > 0 ? cmp_l : audio_l_int[17:2];
-  assign audio_r = status[19:18] > 0 ? cmp_r : audio_r_int[17:2];
+  assign audio_l = master_audio_boost > 0 ? cmp_l : audio_l_int[17:2];
+  assign audio_r = master_audio_boost > 0 ? cmp_r : audio_r_int[17:2];
 
 endmodule

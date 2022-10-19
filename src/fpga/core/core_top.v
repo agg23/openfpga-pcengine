@@ -351,6 +351,15 @@ module core_top (
         32'h204: begin
           extra_sprites_enable <= bridge_wr_data[0];
         end
+        32'h300: begin
+          master_audio_boost <= bridge_wr_data[1:0];
+        end
+        32'h304: begin
+          adpcm_audio_boost <= bridge_wr_data[0];
+        end
+        32'h308: begin
+          cd_audio_boost <= bridge_wr_data[0];
+        end
         // 32'h200: begin
         //   mb128_enable <= bridge_wr_data[0];
         // end
@@ -623,6 +632,10 @@ module core_top (
   reg extra_sprites_enable = 0;
   reg mb128_enable = 0;
 
+  reg cd_audio_boost = 0;
+  reg adpcm_audio_boost = 0;
+  reg [1:0] master_audio_boost = 0;
+
   reg [31:0] reset_delay = 0;
 
   wire turbo_tap_enable_s;
@@ -631,16 +644,32 @@ module core_top (
   wire extra_sprites_enable_s;
   wire mb128_enable_s;
 
+  wire cd_audio_boost_s;
+  wire adpcm_audio_boost_s;
+  wire [1:0] master_audio_boost_s;
+
   synch_3 #(
-      .WIDTH(5)
+      .WIDTH(9)
   ) settings_s (
-      {turbo_tap_enable, button6_enable, overscan_enable, extra_sprites_enable, mb128_enable},
+      {
+        turbo_tap_enable,
+        button6_enable,
+        overscan_enable,
+        extra_sprites_enable,
+        mb128_enable,
+        cd_audio_boost,
+        adpcm_audio_boost,
+        master_audio_boost
+      },
       {
         turbo_tap_enable_s,
         button6_enable_s,
         overscan_enable_s,
         extra_sprites_enable_s,
-        mb128_enable_s
+        mb128_enable_s,
+        cd_audio_boost_s,
+        adpcm_audio_boost_s,
+        master_audio_boost_s
       },
       clk_sys_42_95
   );
@@ -719,6 +748,10 @@ module core_top (
       .overscan_enable(overscan_enable_s),
       .extra_sprites_enable(extra_sprites_enable_s),
       .mb128_enable(mb128_enable_s),
+
+      .cd_audio_boost(cd_audio_boost_s),
+      .adpcm_audio_boost(adpcm_audio_boost_s),
+      .master_audio_boost(master_audio_boost_s),
 
       // Data in
       .ioctl_wr(ioctl_wr),

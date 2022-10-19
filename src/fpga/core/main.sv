@@ -67,6 +67,10 @@ module pce (
     input wire extra_sprites_enable,
     input wire mb128_enable,
 
+    input wire cd_audio_boost,
+    input wire adpcm_audio_boost,
+    input wire [1:0] master_audio_boost,
+
     // Data in
     input wire        ioctl_wr,
     input wire [23:0] ioctl_addr,
@@ -407,6 +411,10 @@ module pce (
 
   pce_audio pce_audio (
       .clk_sys_42_95(clk_sys_42_95),
+
+      .cd_audio_boost(cd_audio_boost),
+      .adpcm_audio_boost(adpcm_audio_boost),
+      .master_audio_boost(master_audio_boost),
 
       .cdda_sl(cdda_sl),
       .cdda_sr(cdda_sr),
