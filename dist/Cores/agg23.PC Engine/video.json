@@ -5,48 +5,48 @@
       {
         "width": 512,
         "height": 240,
-        "aspect_w": 2048,
-        "aspect_h": 1673,
+        "aspect_w": 128,
+        "aspect_h": 105,
         "rotation": 0,
         "mirror": 0
       },
       {
         "width": 512,
         "height": 224,
-        "aspect_w": 256,
-        "aspect_h": 195,
+        "aspect_w": 64,
+        "aspect_h": 49,
         "rotation": 0,
         "mirror": 0
       },
       {
         "width": 320,
         "height": 240,
-        "aspect_w": 16,
-        "aspect_h": 15,
-        "rotation": 0,
-        "mirror": 0
-      },
-      {
-        "width": 320,
-        "height": 224,
         "aspect_w": 8,
         "aspect_h": 7,
         "rotation": 0,
         "mirror": 0
       },
       {
+        "width": 320,
+        "height": 224,
+        "aspect_w": 128,
+        "aspect_h": 105,
+        "rotation": 0,
+        "mirror": 0
+      },
+      {
         "width": 352,
         "height": 240,
-        "aspect_w": 1961,
-        "aspect_h": 2134,
+        "aspect_w": 128,
+        "aspect_h": 105,
         "rotation": 0,
         "mirror": 0
       },
       {
         "width": 352,
         "height": 224,
-        "aspect_w": 1961,
-        "aspect_h": 1992,
+        "aspect_w": 64,
+        "aspect_h": 49,
         "rotation": 0,
         "mirror": 0
       }
