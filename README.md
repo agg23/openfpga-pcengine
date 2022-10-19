@@ -27,6 +27,10 @@ Please note that SuperGrafx and CD games are not currently supported, due to nee
 
 Core supports four players/controllers via the Analogue Dock. To enable four player mode, turn on `Use Turbo Tap` setting.
 
+### 6 button controller
+
+Some games support a 6 button controller. For those games, enable the `Use 6 Button Ctrl` option in `Core Settings`. Please note that this option can break games that don't support the 6 button controller, so turn it off if you're not using it.
+
 ### Video Modes
 
 The PC Engine is unique in that it can arbitrarily decide what resolution to display at. The Pocket is more limited, requiring fixed resolutions at all times. I've tried to compromise and cover the most common resolutions output by the PCE, but some are better supported than others. You should see the best support with horizontal resolutions of 256, 320, 352, and 512 pixels wide. It seems that some of these resolutions drop one or two pixels on the right-hand side of the screen. I haven't figured out what is causing this. Resolutions between 320 and 352 will have some amount of blank black space on the right side.
@@ -37,6 +41,10 @@ There are several options provided for tweaking the displayed video:
 
 * `Hide Overscan` - Adjusts the top and bottom of the video to mask lines that would normally be masked by the CRT. Adjusts the aspect ratio to correspond with this modification
 * `Extra Sprites` - Allows extra sprites to be displayed on each line. Will decrease flickering in some games
+
+### Audio Options
+
+The core can be quiet in some games, so there are options to boost the master audio (`Master Audio Boost`) and ADPCM channels (`PCM Audio Boost`).
 
 ## Licensing
 
