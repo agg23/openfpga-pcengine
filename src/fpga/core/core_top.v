@@ -851,7 +851,7 @@ module core_top (
   wire expanded_h_blank = h_blank && ~(line_started && pixel_count < expected_line_width);
 
   // Customize v_blank to only occur if we've met the line count requirements
-  wire expanded_v_blank = v_blank && ~(frame_started && line_count < 240);
+  wire expanded_v_blank = v_blank && ~(frame_started && line_count < 240) || video_vs_core;
 
   // If we have a border delay (number of pixels from border low), a pixel count below 24, and a total number of pixel clocks
   // since hsync under 160, we're in border.
@@ -859,7 +859,7 @@ module core_top (
   wire expanded_border = border_delay > 0 && pixel_count < 24 && pixel_cycle_count < 160;
 
   // Force DE to remain high if the pixel count for this line, or the line count for this frame hasn't been met
-  wire expanded_de = ~expanded_h_blank && ~expanded_v_blank && ~expanded_border && pixel_count < expected_line_width && line_count < expected_line_count;
+  wire expanded_de = (~expanded_h_blank && ~expanded_v_blank && ~expanded_border && pixel_count < expected_line_width && line_count < expected_line_count) || de;
 
   reg [2:0] hs_delay = 0;
   reg hs_prev = 0;
@@ -875,20 +875,26 @@ module core_top (
   reg [9:0] max_pixel_count = 0;
   reg [8:0] line_count = 0;
 
-  wire [1:0] video_slot = max_pixel_count > 380 ? 0 :
+  // If max hasn't been set yet, use the current pixel count
+  reg [9:0] last_max_pixel_count = 0;
+  wire [9:0] current_max_pixel_count = max_pixel_count > 0 ? max_pixel_count : last_max_pixel_count;
+
+  wire [1:0] video_slot = current_max_pixel_count > 380 ? 0 :
   // 352
-  max_pixel_count > 330 ? 2 :
+  current_max_pixel_count > 330 ? 2 :
   // 320
-  max_pixel_count > 280 ? 1 :
+  current_max_pixel_count > 280 ? 1 :
   // 256
   0;
 
   wire [23:0] video_slot_rgb = {8'b0, video_slot, overscan_enable_s, 10'b0, 3'b0};
 
   always @(posedge current_pix_clk) begin
-    if (video_vs_core && ~vs_prev) begin
+    if (~video_vs_core && vs_prev) begin
       line_count <= 0;
       frame_started <= 0;
+      max_pixel_count <= 0;
+      last_max_pixel_count <= max_pixel_count;
     end
 
     // Count number of pixel cycles, not necessarily drawn ones
@@ -898,7 +904,6 @@ module core_top (
       pixel_cycle_count <= 0;
       pixel_count <= 0;
       line_started <= 0;
-      max_pixel_count <= 0;
 
       // Keep track of the lines in the frame (number of hsyncs)
       if (frame_started) begin
