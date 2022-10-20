@@ -773,7 +773,7 @@ module pce (
   wire bram_wr;
 
   // wire format = status[12];
-  // reg [3:0] defbram = 4'hF;
+  reg [3:0] bram_init_counter = 0;
   reg [15:0] defval[4] = '{16'h5548, 16'h4D42, 16'h8800, 16'h8010};  //{ HUBM,0x00881080 };
 
   wire bk_int = !sd_lba[15:2];
@@ -789,15 +789,22 @@ module pce (
       .q_a(bram_q),
 
       .clock1(clk_sys_42_95),
-      // .address_b(defbram[3] ? {sd_lba[1:0], sd_buff_addr} : defbram[2:1]),
-      // .data_b(defbram[3] ? sd_buff_dout : defval[defbram[2:1]]),
-      // .wren_b(defbram[3] ? bk_int & sd_buff_wr & sd_ack : 1'b1),
-      .address_b({sd_lba[1:0], sd_buff_addr}),
-      .data_b(sd_buff_dout),
-      .wren_b(bk_int & sd_wr),
+      // .address_b(bram_init_counter[3] ? {sd_lba[1:0], sd_buff_addr} : bram_init_counter[2:1]),
+      // .data_b(bram_init_counter[3] ? sd_buff_dout : defval[bram_init_counter[2:1]]),
+      // .wren_b(bram_init_counter[3] ? bk_int & sd_buff_wr & sd_ack : 1'b1),
+      .address_b(bram_init_counter[3] ? {sd_lba[1:0], sd_buff_addr} : bram_init_counter[2:1]),
+      .data_b(bram_init_counter[3] ? sd_buff_dout : defval[bram_init_counter[2:1]]),
+      .wren_b(bram_init_counter[3] ? bk_int & sd_wr : 1'b1),
 
       .q_b(bk_int_dout)
   );
+
+  always @(posedge clk_sys_42_95) begin
+    if (pll_core_locked && bram_init_counter != 4'hF) begin
+      // Initialize memory card
+      bram_init_counter <= bram_init_counter + 4'd1;
+    end
+  end
 
   wire downloading = cart_download;
   reg old_downloading = 0;
@@ -861,10 +868,10 @@ module pce (
 
   //   // old_format <= format;
   //   // if (~old_format && format) begin
-  //   //   defbram <= 0;
+  //   //   bram_init_counter <= 0;
   //   // end
-  //   // if (~defbram[3]) begin
-  //   //   defbram <= defbram + 4'd1;
+  //   // if (~bram_init_counter[3]) begin
+  //   //   bram_init_counter <= bram_init_counter + 4'd1;
   //   // end
   // end
 
