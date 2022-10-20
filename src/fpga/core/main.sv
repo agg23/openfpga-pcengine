@@ -63,8 +63,11 @@ module pce (
     // Settings
     input wire turbo_tap_enable,
     input wire button6_enable,
+
     input wire overscan_enable,
     input wire extra_sprites_enable,
+    input wire raw_rgb_enable,
+
     input wire mb128_enable,
 
     input wire cd_audio_boost,
@@ -383,7 +386,7 @@ module pce (
 
   logic [7:0] r1, b1, g1;
 
-  assign {r1, g1, b1} = status[28] ? {{r, r, r[2:1]}, {g, g, g[2:1]}, {b, b, b[2:1]}} : pal_color;
+  assign {r1, g1, b1} = raw_rgb_enable ? {{r, r, r[2:1]}, {g, g, g[2:1]}, {b, b, b[2:1]}} : pal_color;
 
   color_mix color_mix (
       .clk_vid(clk_mem_85_91),

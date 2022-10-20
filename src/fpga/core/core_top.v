@@ -351,6 +351,9 @@ module core_top (
         32'h204: begin
           extra_sprites_enable <= bridge_wr_data[0];
         end
+        32'h208: begin
+          raw_rgb_enable <= bridge_wr_data[0];
+        end
         32'h300: begin
           master_audio_boost <= bridge_wr_data[1:0];
         end
@@ -630,6 +633,7 @@ module core_top (
   reg button6_enable = 0;
   reg overscan_enable = 0;
   reg extra_sprites_enable = 0;
+  reg raw_rgb_enable = 0;
   reg mb128_enable = 0;
 
   reg cd_audio_boost = 0;
@@ -642,6 +646,7 @@ module core_top (
   wire button6_enable_s;
   wire overscan_enable_s;
   wire extra_sprites_enable_s;
+  wire raw_rgb_enable_s;
   wire mb128_enable_s;
 
   wire cd_audio_boost_s;
@@ -649,13 +654,14 @@ module core_top (
   wire [1:0] master_audio_boost_s;
 
   synch_3 #(
-      .WIDTH(9)
+      .WIDTH(10)
   ) settings_s (
       {
         turbo_tap_enable,
         button6_enable,
         overscan_enable,
         extra_sprites_enable,
+        raw_rgb_enable,
         mb128_enable,
         cd_audio_boost,
         adpcm_audio_boost,
@@ -666,6 +672,7 @@ module core_top (
         button6_enable_s,
         overscan_enable_s,
         extra_sprites_enable_s,
+        raw_rgb_enable_s,
         mb128_enable_s,
         cd_audio_boost_s,
         adpcm_audio_boost_s,
@@ -744,9 +751,12 @@ module core_top (
 
       // Settings
       .turbo_tap_enable(turbo_tap_enable_s),
-      .button6_enable(button6_enable_s),
+      .button6_enable  (button6_enable_s),
+
       .overscan_enable(overscan_enable_s),
       .extra_sprites_enable(extra_sprites_enable_s),
+      .raw_rgb_enable(raw_rgb_enable_s),
+
       .mb128_enable(mb128_enable_s),
 
       .cd_audio_boost(cd_audio_boost_s),

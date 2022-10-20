@@ -55,6 +55,17 @@
         "value": 1
       },
       {
+        "name": "Raw RGB Color",
+        "id": 42,
+        "type": "check",
+        "enabled": true,
+        "address": "0x00000208",
+        "persist": true,
+        "writeonly": true,
+        "defaultval": 0,
+        "value": 1
+      },
+      {
         "name": "Master Audio Boost",
         "id": 60,
         "type": "list",
