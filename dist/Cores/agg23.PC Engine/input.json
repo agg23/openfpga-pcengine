@@ -17,12 +17,12 @@
           },
           {
             "id": 2,
-            "name": "III Button",
+            "name": "III/Turbo I Button",
             "key": "pad_btn_x"
           },
           {
             "id": 3,
-            "name": "IV Button",
+            "name": "IV/Turbo II Button",
             "key": "pad_btn_y"
           },
           {
