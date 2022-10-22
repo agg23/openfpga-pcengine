@@ -345,6 +345,12 @@ module core_top (
         32'h104: begin
           button6_enable <= bridge_wr_data[0];
         end
+        32'h108: begin
+          button1_turbo_speed <= bridge_wr_data[1:0];
+        end
+        32'h10C: begin
+          button2_turbo_speed <= bridge_wr_data[1:0];
+        end
         32'h200: begin
           overscan_enable <= bridge_wr_data[0];
         end
@@ -631,6 +637,9 @@ module core_top (
 
   reg turbo_tap_enable = 0;
   reg button6_enable = 0;
+  reg [1:0] button1_turbo_speed = 0;
+  reg [1:0] button2_turbo_speed = 0;
+
   reg overscan_enable = 0;
   reg extra_sprites_enable = 0;
   reg raw_rgb_enable = 0;
@@ -642,8 +651,13 @@ module core_top (
 
   reg [31:0] reset_delay = 0;
 
+  // Sync
+
   wire turbo_tap_enable_s;
   wire button6_enable_s;
+  wire [1:0] button1_turbo_speed_s;
+  wire [1:0] button2_turbo_speed_s;
+
   wire overscan_enable_s;
   wire extra_sprites_enable_s;
   wire raw_rgb_enable_s;
@@ -654,11 +668,13 @@ module core_top (
   wire [1:0] master_audio_boost_s;
 
   synch_3 #(
-      .WIDTH(10)
+      .WIDTH(14)
   ) settings_s (
       {
         turbo_tap_enable,
         button6_enable,
+        button1_turbo_speed,
+        button2_turbo_speed,
         overscan_enable,
         extra_sprites_enable,
         raw_rgb_enable,
@@ -670,6 +686,8 @@ module core_top (
       {
         turbo_tap_enable_s,
         button6_enable_s,
+        button1_turbo_speed_s,
+        button2_turbo_speed_s,
         overscan_enable_s,
         extra_sprites_enable_s,
         raw_rgb_enable_s,
@@ -751,7 +769,9 @@ module core_top (
 
       // Settings
       .turbo_tap_enable(turbo_tap_enable_s),
-      .button6_enable  (button6_enable_s),
+      .button6_enable(button6_enable_s),
+      .button1_turbo_speed(button1_turbo_speed_s),
+      .button2_turbo_speed(button2_turbo_speed_s),
 
       .overscan_enable(overscan_enable_s),
       .extra_sprites_enable(extra_sprites_enable_s),

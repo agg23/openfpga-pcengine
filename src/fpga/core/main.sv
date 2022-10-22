@@ -63,6 +63,8 @@ module pce (
     // Settings
     input wire turbo_tap_enable,
     input wire button6_enable,
+    input wire [1:0] button1_turbo_speed,
+    input wire [1:0] button2_turbo_speed,
 
     input wire overscan_enable,
     input wire extra_sprites_enable,
@@ -573,6 +575,14 @@ module pce (
 
   ////////////////////////////  INPUT  ///////////////////////////////////
 
+  wire button1_turbo_enable = button1_turbo_speed == 1 ? turbo_counter[2] :
+                              button1_turbo_speed == 2 ? turbo_counter[1] :
+                              1;
+
+  wire button2_turbo_enable = button2_turbo_speed == 1 ? turbo_counter[2] :
+                              button2_turbo_speed == 2 ? turbo_counter[1] :
+                              1;
+
   wire [11:0] joy_0 = {
     p1_button_6,
     p1_button_5,
@@ -580,8 +590,8 @@ module pce (
     p1_button_3,
     p1_button_start,
     p1_button_select,
-    p1_button_2,
-    p1_button_1,
+    button6_enable ? p1_button_2 : p1_button_2 | (button2_turbo_enable && p1_button_4),
+    button6_enable ? p1_button_1 : p1_button_1 | (button1_turbo_enable && p1_button_3),
     p1_dpad_up,
     p1_dpad_down,
     p1_dpad_left,
@@ -595,8 +605,8 @@ module pce (
     p2_button_3,
     p2_button_start,
     p2_button_select,
-    p2_button_2,
-    p2_button_1,
+    button6_enable ? p2_button_2 : p2_button_2 | (button2_turbo_enable && p2_button_4),
+    button6_enable ? p2_button_1 : p2_button_1 | (button1_turbo_enable && p2_button_3),
     p2_dpad_up,
     p2_dpad_down,
     p2_dpad_left,
@@ -610,8 +620,8 @@ module pce (
     p3_button_3,
     p3_button_start,
     p3_button_select,
-    p3_button_2,
-    p3_button_1,
+    button6_enable ? p3_button_2 : p3_button_2 | (button2_turbo_enable && p3_button_4),
+    button6_enable ? p3_button_1 : p3_button_1 | (button1_turbo_enable && p3_button_3),
     p3_dpad_up,
     p3_dpad_down,
     p3_dpad_left,
@@ -625,8 +635,8 @@ module pce (
     p4_button_3,
     p4_button_start,
     p4_button_select,
-    p4_button_2,
-    p4_button_1,
+    button6_enable ? p4_button_2 : p4_button_2 | (button2_turbo_enable && p4_button_4),
+    button6_enable ? p4_button_1 : p4_button_1 | (button1_turbo_enable && p4_button_3),
     p4_dpad_up,
     p4_dpad_down,
     p4_dpad_left,
@@ -635,7 +645,7 @@ module pce (
 
   wire [11:0] joy_4 = 0;
 
-  wire [15:0] joy_data;
+  wire [15:0] joy_data  /* synthesis keep */;
   always_comb begin
     case (joy_port)
       0:
@@ -690,6 +700,7 @@ module pce (
   reg [2:0] joy_port;
   reg [1:0] mouse_cnt;
   reg [7:0] ms_x, ms_y;
+  reg [3:0] turbo_counter = 0;
 
   always @(posedge clk_sys_42_95) begin : input_block
     reg [ 1:0] last_gp;
@@ -723,6 +734,11 @@ module pce (
     // end
 
     if (joy_out[1]) begin
+      if (~last_gp[1]) begin
+        // Rising edge of joy_out
+        turbo_counter <= turbo_counter + 1;
+      end
+
       joy_port <= 0;
       if (status[27:26] != 2'b11) begin
         joy_latch <= 0;

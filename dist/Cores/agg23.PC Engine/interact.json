@@ -33,6 +33,38 @@
         "value": 1
       },
       {
+        "name": "Button I Turbo",
+        "id": 22,
+        "type": "slider_u32",
+        "enabled": true,
+        "address": "0x00000108",
+        "persist": true,
+        "writeonly": true,
+        "defaultval": 0,
+        "graphical": {
+          "min": 0,
+          "max": 2,
+          "adjust_small": 1,
+          "adjust_large": 1
+        }
+      },
+      {
+        "name": "Button II Turbo",
+        "id": 22,
+        "type": "slider_u32",
+        "enabled": true,
+        "address": "0x0000010C",
+        "persist": true,
+        "writeonly": true,
+        "defaultval": 0,
+        "graphical": {
+          "min": 0,
+          "max": 2,
+          "adjust_small": 1,
+          "adjust_large": 1
+        }
+      },
+      {
         "name": "Hide Overscan",
         "id": 40,
         "type": "check",
