@@ -737,6 +737,11 @@ set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 
 # end ENTITY(mf_pllbase_0002)
 # ---------------------------
+set_global_assignment -name NUM_PARALLEL_PROCESSORS 4
+set_global_assignment -name SEED 2
+set_global_assignment -name PHYSICAL_SYNTHESIS_EFFORT EXTRA
+set_global_assignment -name ALM_REGISTER_PACKING_EFFORT LOW
+set_global_assignment -name VERILOG_FILE core/linebuffer.v
 set_global_assignment -name SYSTEMVERILOG_FILE core/rtl/sdram.sv
 set_global_assignment -name MIF_FILE core/rtl/palette.mif
 set_global_assignment -name SYSTEMVERILOG_FILE core/audio.sv
@@ -769,131 +774,451 @@ set_global_assignment -name SDC_FILE core/core_constraints.sdc
 set_global_assignment -name SIGNALTAP_FILE core/stp1.stp
 set_global_assignment -name QIP_FILE core/mf_pllbase.qip
 set_global_assignment -name SIP_FILE core/mf_pllbase.sip
-set_global_assignment -name NUM_PARALLEL_PROCESSORS 4
-set_global_assignment -name SEED 2
-set_global_assignment -name PHYSICAL_SYNTHESIS_EFFORT EXTRA
-set_global_assignment -name ALM_REGISTER_PACKING_EFFORT LOW
-set_global_assignment -name SLD_NODE_CREATOR_ID 110 -section_id Input
-set_global_assignment -name SLD_NODE_ENTITY_NAME sld_signaltap -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_clk -to "core_top:ic|mf_pllbase:mp1|outclk_0" -section_id Input
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_RAM_BLOCK_TYPE=AUTO" -section_id Input
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_INFO=805334532" -section_id Input
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_POWER_UP_TRIGGER=0" -section_id Input
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STORAGE_QUALIFIER_INVERSION_MASK_LENGTH=0" -section_id Input
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ATTRIBUTE_MEM_MODE=OFF" -section_id Input
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STATE_FLOW_USE_GENERATED=0" -section_id Input
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STATE_BITS=11" -section_id Input
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_BUFFER_FULL_STOP=1" -section_id Input
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_CURRENT_RESOURCE_WIDTH=1" -section_id Input
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INCREMENTAL_ROUTING=1" -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[0] -to Input|gnd -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[1] -to Input|gnd -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[3] -to Input|gnd -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[5] -to Input|gnd -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[6] -to Input|vcc -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[7] -to Input|gnd -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[8] -to Input|vcc -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[9] -to Input|vcc -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[10] -to Input|gnd -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[11] -to Input|gnd -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[12] -to Input|gnd -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[15] -to Input|vcc -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[18] -to Input|vcc -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[19] -to Input|vcc -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[20] -to Input|vcc -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[21] -to Input|vcc -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[23] -to Input|gnd -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[24] -to Input|vcc -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[26] -to Input|gnd -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[28] -to Input|vcc -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[30] -to Input|vcc -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[31] -to Input|gnd -section_id Input
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL=1" -section_id Input
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_IN_ENABLED=0" -section_id Input
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_PIPELINE=0" -section_id Input
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_RAM_PIPELINE=0" -section_id Input
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_COUNTER_PIPELINE=0" -section_id Input
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ADVANCED_TRIGGER_ENTITY=basic,1," -section_id Input
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL_PIPELINE=1" -section_id Input
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ENABLE_ADVANCED_TRIGGER=0" -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[17] -to Input|vcc -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[22] -to Input|vcc -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[25] -to Input|gnd -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[29] -to Input|gnd -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[13] -to Input|vcc -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[0] -to "core_top:ic|pce:pce|joy_data[0]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[1] -to "core_top:ic|pce:pce|joy_data[10]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[2] -to "core_top:ic|pce:pce|joy_data[11]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[3] -to "core_top:ic|pce:pce|joy_data[12]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[4] -to "core_top:ic|pce:pce|joy_data[13]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[5] -to "core_top:ic|pce:pce|joy_data[14]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[6] -to "core_top:ic|pce:pce|joy_data[15]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[7] -to "core_top:ic|pce:pce|joy_data[1]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[8] -to "core_top:ic|pce:pce|joy_data[2]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[9] -to "core_top:ic|pce:pce|joy_data[3]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[10] -to "core_top:ic|pce:pce|joy_data[4]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[11] -to "core_top:ic|pce:pce|joy_data[5]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[12] -to "core_top:ic|pce:pce|joy_data[6]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[13] -to "core_top:ic|pce:pce|joy_data[7]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[14] -to "core_top:ic|pce:pce|joy_data[8]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[15] -to "core_top:ic|pce:pce|joy_data[9]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[16] -to "core_top:ic|pce:pce|joy_latch[0]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[17] -to "core_top:ic|pce:pce|joy_latch[1]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[18] -to "core_top:ic|pce:pce|joy_latch[2]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[19] -to "core_top:ic|pce:pce|joy_latch[3]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[20] -to "core_top:ic|pce:pce|joy_port[0]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[21] -to "core_top:ic|pce:pce|joy_port[1]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[22] -to "core_top:ic|pce:pce|joy_port[2]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[23] -to "core_top:ic|pce:pce|p1_button_1" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[24] -to "core_top:ic|pce:pce|p1_button_2" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[25] -to "core_top:ic|pce:pce|pce_top:pce_top|JOY_IN[0]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[26] -to "core_top:ic|pce:pce|pce_top:pce_top|JOY_IN[1]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[27] -to "core_top:ic|pce:pce|pce_top:pce_top|JOY_IN[2]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[28] -to "core_top:ic|pce:pce|pce_top:pce_top|JOY_IN[3]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[29] -to "core_top:ic|pce:pce|pce_top:pce_top|JOY_OUT[0]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[30] -to "core_top:ic|pce:pce|pce_top:pce_top|JOY_OUT[1]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[0] -to "core_top:ic|pce:pce|joy_data[0]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[1] -to "core_top:ic|pce:pce|joy_data[10]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[2] -to "core_top:ic|pce:pce|joy_data[11]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[3] -to "core_top:ic|pce:pce|joy_data[12]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[4] -to "core_top:ic|pce:pce|joy_data[13]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[5] -to "core_top:ic|pce:pce|joy_data[14]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[6] -to "core_top:ic|pce:pce|joy_data[15]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[7] -to "core_top:ic|pce:pce|joy_data[1]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[8] -to "core_top:ic|pce:pce|joy_data[2]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[9] -to "core_top:ic|pce:pce|joy_data[3]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[10] -to "core_top:ic|pce:pce|joy_data[4]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[11] -to "core_top:ic|pce:pce|joy_data[5]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[12] -to "core_top:ic|pce:pce|joy_data[6]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[13] -to "core_top:ic|pce:pce|joy_data[7]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[14] -to "core_top:ic|pce:pce|joy_data[8]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[15] -to "core_top:ic|pce:pce|joy_data[9]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[16] -to "core_top:ic|pce:pce|joy_latch[0]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[17] -to "core_top:ic|pce:pce|joy_latch[1]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[18] -to "core_top:ic|pce:pce|joy_latch[2]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[19] -to "core_top:ic|pce:pce|joy_latch[3]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[20] -to "core_top:ic|pce:pce|joy_port[0]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[21] -to "core_top:ic|pce:pce|joy_port[1]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[22] -to "core_top:ic|pce:pce|joy_port[2]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[23] -to "core_top:ic|pce:pce|p1_button_1" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[24] -to "core_top:ic|pce:pce|p1_button_2" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[25] -to "core_top:ic|pce:pce|pce_top:pce_top|JOY_IN[0]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[26] -to "core_top:ic|pce:pce|pce_top:pce_top|JOY_IN[1]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[27] -to "core_top:ic|pce:pce|pce_top:pce_top|JOY_IN[2]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[28] -to "core_top:ic|pce:pce|pce_top:pce_top|JOY_IN[3]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[29] -to "core_top:ic|pce:pce|pce_top:pce_top|JOY_OUT[0]" -section_id Input
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[30] -to "core_top:ic|pce:pce|pce_top:pce_top|JOY_OUT[1]" -section_id Input
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_DATA_BITS=31" -section_id Input
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_BITS=31" -section_id Input
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STORAGE_QUALIFIER_BITS=31" -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[2] -to Input|vcc -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[4] -to Input|gnd -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[14] -to Input|gnd -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[16] -to Input|gnd -section_id Input
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[27] -to Input|gnd -section_id Input
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" -section_id Input
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=122" -section_id Input
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SEGMENT_SIZE=32768" -section_id Input
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SAMPLE_DEPTH=32768" -section_id Input
+set_global_assignment -name SLD_NODE_CREATOR_ID 110 -section_id Linebuffer
+set_global_assignment -name SLD_NODE_ENTITY_NAME sld_signaltap -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_clk -to "core_top:ic|mf_pllbase:mp1|outclk_0" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[0] -to "core_top:ic|linebuffer:linebuffer|bank_empty" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[1] -to "core_top:ic|linebuffer:linebuffer|bank_q[0]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[2] -to "core_top:ic|linebuffer:linebuffer|bank_q[10]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[3] -to "core_top:ic|linebuffer:linebuffer|bank_q[11]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[4] -to "core_top:ic|linebuffer:linebuffer|bank_q[12]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[5] -to "core_top:ic|linebuffer:linebuffer|bank_q[13]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[6] -to "core_top:ic|linebuffer:linebuffer|bank_q[14]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[7] -to "core_top:ic|linebuffer:linebuffer|bank_q[15]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[8] -to "core_top:ic|linebuffer:linebuffer|bank_q[16]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[9] -to "core_top:ic|linebuffer:linebuffer|bank_q[17]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[10] -to "core_top:ic|linebuffer:linebuffer|bank_q[18]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[11] -to "core_top:ic|linebuffer:linebuffer|bank_q[19]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[12] -to "core_top:ic|linebuffer:linebuffer|bank_q[1]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[13] -to "core_top:ic|linebuffer:linebuffer|bank_q[20]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[14] -to "core_top:ic|linebuffer:linebuffer|bank_q[21]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[15] -to "core_top:ic|linebuffer:linebuffer|bank_q[22]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[16] -to "core_top:ic|linebuffer:linebuffer|bank_q[23]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[17] -to "core_top:ic|linebuffer:linebuffer|bank_q[2]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[18] -to "core_top:ic|linebuffer:linebuffer|bank_q[3]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[19] -to "core_top:ic|linebuffer:linebuffer|bank_q[4]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[20] -to "core_top:ic|linebuffer:linebuffer|bank_q[5]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[21] -to "core_top:ic|linebuffer:linebuffer|bank_q[6]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[22] -to "core_top:ic|linebuffer:linebuffer|bank_q[7]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[23] -to "core_top:ic|linebuffer:linebuffer|bank_q[8]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[24] -to "core_top:ic|linebuffer:linebuffer|bank_q[9]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[25] -to "core_top:ic|linebuffer:linebuffer|bank_read_ack" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[26] -to "core_top:ic|linebuffer:linebuffer|bank_write" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[27] -to "core_top:ic|linebuffer:linebuffer|ce_pix" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[0] -to "core_top:ic|linebuffer:linebuffer|bank_empty" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[1] -to "core_top:ic|linebuffer:linebuffer|bank_q[0]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[2] -to "core_top:ic|linebuffer:linebuffer|bank_q[10]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[3] -to "core_top:ic|linebuffer:linebuffer|bank_q[11]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[4] -to "core_top:ic|linebuffer:linebuffer|bank_q[12]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[5] -to "core_top:ic|linebuffer:linebuffer|bank_q[13]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[6] -to "core_top:ic|linebuffer:linebuffer|bank_q[14]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[7] -to "core_top:ic|linebuffer:linebuffer|bank_q[15]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[8] -to "core_top:ic|linebuffer:linebuffer|bank_q[16]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[9] -to "core_top:ic|linebuffer:linebuffer|bank_q[17]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[10] -to "core_top:ic|linebuffer:linebuffer|bank_q[18]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[11] -to "core_top:ic|linebuffer:linebuffer|bank_q[19]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[12] -to "core_top:ic|linebuffer:linebuffer|bank_q[1]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[13] -to "core_top:ic|linebuffer:linebuffer|bank_q[20]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[14] -to "core_top:ic|linebuffer:linebuffer|bank_q[21]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[15] -to "core_top:ic|linebuffer:linebuffer|bank_q[22]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[16] -to "core_top:ic|linebuffer:linebuffer|bank_q[23]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[17] -to "core_top:ic|linebuffer:linebuffer|bank_q[2]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[18] -to "core_top:ic|linebuffer:linebuffer|bank_q[3]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[19] -to "core_top:ic|linebuffer:linebuffer|bank_q[4]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[20] -to "core_top:ic|linebuffer:linebuffer|bank_q[5]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[21] -to "core_top:ic|linebuffer:linebuffer|bank_q[6]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[22] -to "core_top:ic|linebuffer:linebuffer|bank_q[7]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[23] -to "core_top:ic|linebuffer:linebuffer|bank_q[8]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[24] -to "core_top:ic|linebuffer:linebuffer|bank_q[9]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[25] -to "core_top:ic|linebuffer:linebuffer|bank_read_ack" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[26] -to "core_top:ic|linebuffer:linebuffer|bank_write" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[27] -to "core_top:ic|linebuffer:linebuffer|ce_pix" -section_id Linebuffer
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_RAM_BLOCK_TYPE=AUTO" -section_id Linebuffer
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_INFO=805334533" -section_id Linebuffer
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_POWER_UP_TRIGGER=0" -section_id Linebuffer
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STORAGE_QUALIFIER_INVERSION_MASK_LENGTH=0" -section_id Linebuffer
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ATTRIBUTE_MEM_MODE=OFF" -section_id Linebuffer
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STATE_FLOW_USE_GENERATED=0" -section_id Linebuffer
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STATE_BITS=11" -section_id Linebuffer
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_BUFFER_FULL_STOP=1" -section_id Linebuffer
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_CURRENT_RESOURCE_WIDTH=1" -section_id Linebuffer
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INCREMENTAL_ROUTING=1" -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[0] -to Linebuffer|vcc -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[1] -to Linebuffer|vcc -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[3] -to Linebuffer|vcc -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[5] -to Linebuffer|vcc -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[7] -to Linebuffer|gnd -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[10] -to Linebuffer|gnd -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[16] -to Linebuffer|vcc -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[17] -to Linebuffer|gnd -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[20] -to Linebuffer|gnd -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[21] -to Linebuffer|vcc -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[22] -to Linebuffer|gnd -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[25] -to Linebuffer|vcc -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[26] -to Linebuffer|vcc -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[27] -to Linebuffer|gnd -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[28] -to Linebuffer|vcc -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[30] -to Linebuffer|gnd -section_id Linebuffer
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL=1" -section_id Linebuffer
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_IN_ENABLED=0" -section_id Linebuffer
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_PIPELINE=0" -section_id Linebuffer
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_RAM_PIPELINE=0" -section_id Linebuffer
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_COUNTER_PIPELINE=0" -section_id Linebuffer
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ADVANCED_TRIGGER_ENTITY=basic,1," -section_id Linebuffer
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL_PIPELINE=1" -section_id Linebuffer
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ENABLE_ADVANCED_TRIGGER=0" -section_id Linebuffer
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SEGMENT_SIZE=4096" -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[18] -to Linebuffer|gnd -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[19] -to Linebuffer|vcc -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[24] -to Linebuffer|gnd -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[31] -to Linebuffer|vcc -section_id Linebuffer
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SAMPLE_DEPTH=4096" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[28] -to "core_top:ic|linebuffer:linebuffer|hs_delay[0]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[29] -to "core_top:ic|linebuffer:linebuffer|hs_delay[1]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[30] -to "core_top:ic|linebuffer:linebuffer|hs_delay[2]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[31] -to "core_top:ic|linebuffer:linebuffer|hs_delay[3]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[32] -to "core_top:ic|linebuffer:linebuffer|hsync_in" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[33] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[0]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[34] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[10]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[35] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[11]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[36] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[12]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[37] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[13]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[38] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[14]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[39] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[15]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[40] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[16]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[41] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[17]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[42] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[18]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[43] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[19]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[44] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[1]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[45] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[20]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[46] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[21]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[47] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[22]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[48] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[23]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[49] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[2]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[50] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[3]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[51] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[4]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[52] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[5]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[53] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[6]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[54] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[7]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[55] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[8]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[56] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[9]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[57] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|empty" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[58] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[0]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[59] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[10]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[60] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[11]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[61] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[12]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[62] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[13]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[63] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[14]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[64] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[15]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[65] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[16]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[66] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[17]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[67] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[18]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[68] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[19]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[69] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[1]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[70] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[20]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[71] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[21]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[72] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[22]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[73] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[23]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[74] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[2]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[75] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[3]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[76] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[4]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[77] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[5]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[78] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[6]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[79] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[7]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[80] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[8]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[81] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[9]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[82] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|read_ack" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[83] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|used[0]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[84] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|used[1]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[85] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|used[2]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[86] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|used[3]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[87] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|used[4]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[88] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|used[5]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[89] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|used[6]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[90] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|used[7]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[91] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|used[8]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[92] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|write_req" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[93] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[0]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[94] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[10]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[95] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[11]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[96] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[12]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[97] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[13]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[98] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[14]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[99] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[15]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[100] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[16]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[101] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[17]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[102] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[18]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[103] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[19]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[104] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[1]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[105] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[20]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[106] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[21]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[107] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[22]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[108] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[23]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[109] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[2]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[110] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[3]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[111] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[4]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[112] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[5]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[113] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[6]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[114] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[7]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[115] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[8]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[116] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[9]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[117] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|empty" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[118] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[0]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[119] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[10]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[120] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[11]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[121] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[12]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[122] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[13]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[123] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[14]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[124] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[15]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[125] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[16]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[126] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[17]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[127] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[18]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[128] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[19]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[129] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[1]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[130] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[20]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[131] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[21]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[132] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[22]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[133] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[23]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[134] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[2]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[135] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[3]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[136] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[4]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[137] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[5]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[138] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[6]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[139] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[7]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[140] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[8]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[141] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[9]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[142] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|read_ack" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[143] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|used[0]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[144] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|used[1]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[145] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|used[2]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[146] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|used[3]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[147] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|used[4]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[148] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|used[5]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[149] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|used[6]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[150] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|used[7]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[151] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|used[8]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[152] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|write_req" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[153] -to "core_top:ic|linebuffer:linebuffer|output_bank_select" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[28] -to "core_top:ic|linebuffer:linebuffer|hs_delay[0]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[29] -to "core_top:ic|linebuffer:linebuffer|hs_delay[1]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[30] -to "core_top:ic|linebuffer:linebuffer|hs_delay[2]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[31] -to "core_top:ic|linebuffer:linebuffer|hs_delay[3]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[32] -to "core_top:ic|linebuffer:linebuffer|hsync_in" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[33] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[0]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[34] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[10]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[35] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[11]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[36] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[12]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[37] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[13]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[38] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[14]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[39] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[15]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[40] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[16]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[41] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[17]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[42] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[18]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[43] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[19]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[44] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[1]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[45] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[20]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[46] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[21]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[47] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[22]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[48] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[23]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[49] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[2]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[50] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[3]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[51] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[4]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[52] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[5]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[53] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[6]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[54] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[7]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[55] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[8]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[56] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|data[9]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[57] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|empty" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[58] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[0]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[59] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[10]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[60] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[11]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[61] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[12]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[62] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[13]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[63] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[14]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[64] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[15]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[65] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[16]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[66] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[17]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[67] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[18]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[68] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[19]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[69] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[1]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[70] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[20]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[71] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[21]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[72] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[22]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[73] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[23]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[74] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[2]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[75] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[3]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[76] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[4]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[77] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[5]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[78] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[6]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[79] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[7]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[80] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[8]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[81] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|q[9]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[82] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|read_ack" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[83] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|used[0]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[84] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|used[1]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[85] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|used[2]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[86] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|used[3]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[87] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|used[4]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[88] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|used[5]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[89] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|used[6]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[90] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|used[7]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[91] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|used[8]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[92] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank0|write_req" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[93] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[0]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[94] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[10]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[95] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[11]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[96] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[12]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[97] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[13]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[98] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[14]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[99] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[15]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[100] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[16]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[101] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[17]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[102] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[18]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[103] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[19]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[104] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[1]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[105] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[20]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[106] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[21]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[107] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[22]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[108] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[23]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[109] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[2]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[110] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[3]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[111] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[4]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[112] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[5]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[113] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[6]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[114] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[7]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[115] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[8]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[116] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|data[9]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[117] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|empty" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[118] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[0]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[119] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[10]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[120] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[11]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[121] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[12]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[122] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[13]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[123] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[14]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[124] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[15]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[125] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[16]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[126] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[17]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[127] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[18]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[128] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[19]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[129] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[1]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[130] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[20]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[131] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[21]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[132] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[22]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[133] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[23]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[134] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[2]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[135] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[3]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[136] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[4]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[137] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[5]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[138] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[6]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[139] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[7]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[140] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[8]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[141] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|q[9]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[142] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|read_ack" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[143] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|used[0]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[144] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|used[1]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[145] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|used[2]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[146] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|used[3]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[147] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|used[4]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[148] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|used[5]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[149] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|used[6]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[150] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|used[7]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[151] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|used[8]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[152] -to "core_top:ic|linebuffer:linebuffer|linebuffer_bank:bank1|write_req" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[153] -to "core_top:ic|linebuffer:linebuffer|output_bank_select" -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[6] -to Linebuffer|gnd -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[9] -to Linebuffer|vcc -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[12] -to Linebuffer|vcc -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[13] -to Linebuffer|gnd -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[14] -to Linebuffer|gnd -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[15] -to Linebuffer|gnd -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[23] -to Linebuffer|gnd -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[154] -to "core_top:ic|linebuffer:linebuffer|output_line_width[0]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[155] -to "core_top:ic|linebuffer:linebuffer|output_line_width[1]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[156] -to "core_top:ic|linebuffer:linebuffer|output_line_width[2]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[157] -to "core_top:ic|linebuffer:linebuffer|output_line_width[3]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[158] -to "core_top:ic|linebuffer:linebuffer|output_line_width[4]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[159] -to "core_top:ic|linebuffer:linebuffer|output_line_width[5]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[160] -to "core_top:ic|linebuffer:linebuffer|output_line_width[6]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[161] -to "core_top:ic|linebuffer:linebuffer|output_line_width[7]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[162] -to "core_top:ic|linebuffer:linebuffer|output_line_width[8]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[163] -to "core_top:ic|linebuffer:linebuffer|vsync_in" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[164] -to "core_top:ic|pce:pce|hblank" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[165] -to "core_top:ic|pce:pce|vblank" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[166] -to "core_top:ic|video_de" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[167] -to "core_top:ic|video_hs" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[168] -to "core_top:ic|video_rgb[0]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[169] -to "core_top:ic|video_rgb[10]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[170] -to "core_top:ic|video_rgb[11]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[171] -to "core_top:ic|video_rgb[12]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[172] -to "core_top:ic|video_rgb[13]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[173] -to "core_top:ic|video_rgb[14]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[174] -to "core_top:ic|video_rgb[15]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[175] -to "core_top:ic|video_rgb[16]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[176] -to "core_top:ic|video_rgb[17]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[177] -to "core_top:ic|video_rgb[18]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[178] -to "core_top:ic|video_rgb[19]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[179] -to "core_top:ic|video_rgb[1]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[180] -to "core_top:ic|video_rgb[20]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[181] -to "core_top:ic|video_rgb[21]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[182] -to "core_top:ic|video_rgb[22]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[183] -to "core_top:ic|video_rgb[23]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[184] -to "core_top:ic|video_rgb[2]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[185] -to "core_top:ic|video_rgb[3]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[186] -to "core_top:ic|video_rgb[4]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[187] -to "core_top:ic|video_rgb[5]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[188] -to "core_top:ic|video_rgb[6]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[189] -to "core_top:ic|video_rgb[7]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[190] -to "core_top:ic|video_rgb[8]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[191] -to "core_top:ic|video_rgb[9]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[192] -to "core_top:ic|video_vs" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[154] -to "core_top:ic|linebuffer:linebuffer|output_line_width[0]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[155] -to "core_top:ic|linebuffer:linebuffer|output_line_width[1]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[156] -to "core_top:ic|linebuffer:linebuffer|output_line_width[2]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[157] -to "core_top:ic|linebuffer:linebuffer|output_line_width[3]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[158] -to "core_top:ic|linebuffer:linebuffer|output_line_width[4]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[159] -to "core_top:ic|linebuffer:linebuffer|output_line_width[5]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[160] -to "core_top:ic|linebuffer:linebuffer|output_line_width[6]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[161] -to "core_top:ic|linebuffer:linebuffer|output_line_width[7]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[162] -to "core_top:ic|linebuffer:linebuffer|output_line_width[8]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[163] -to "core_top:ic|linebuffer:linebuffer|vsync_in" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[164] -to "core_top:ic|pce:pce|hblank" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[165] -to "core_top:ic|pce:pce|vblank" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[166] -to "core_top:ic|video_de" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[167] -to "core_top:ic|video_hs" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[168] -to "core_top:ic|video_rgb[0]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[169] -to "core_top:ic|video_rgb[10]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[170] -to "core_top:ic|video_rgb[11]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[171] -to "core_top:ic|video_rgb[12]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[172] -to "core_top:ic|video_rgb[13]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[173] -to "core_top:ic|video_rgb[14]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[174] -to "core_top:ic|video_rgb[15]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[175] -to "core_top:ic|video_rgb[16]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[176] -to "core_top:ic|video_rgb[17]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[177] -to "core_top:ic|video_rgb[18]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[178] -to "core_top:ic|video_rgb[19]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[179] -to "core_top:ic|video_rgb[1]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[180] -to "core_top:ic|video_rgb[20]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[181] -to "core_top:ic|video_rgb[21]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[182] -to "core_top:ic|video_rgb[22]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[183] -to "core_top:ic|video_rgb[23]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[184] -to "core_top:ic|video_rgb[2]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[185] -to "core_top:ic|video_rgb[3]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[186] -to "core_top:ic|video_rgb[4]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[187] -to "core_top:ic|video_rgb[5]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[188] -to "core_top:ic|video_rgb[6]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[189] -to "core_top:ic|video_rgb[7]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[190] -to "core_top:ic|video_rgb[8]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[191] -to "core_top:ic|video_rgb[9]" -section_id Linebuffer
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[192] -to "core_top:ic|video_vs" -section_id Linebuffer
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_DATA_BITS=193" -section_id Linebuffer
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_BITS=193" -section_id Linebuffer
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STORAGE_QUALIFIER_BITS=193" -section_id Linebuffer
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" -section_id Linebuffer
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=605" -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[2] -to Linebuffer|vcc -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[4] -to Linebuffer|vcc -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[8] -to Linebuffer|vcc -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[11] -to Linebuffer|vcc -section_id Linebuffer
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[29] -to Linebuffer|gnd -section_id Linebuffer
 set_global_assignment -name SLD_FILE db/stp1_auto_stripped.stp
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
