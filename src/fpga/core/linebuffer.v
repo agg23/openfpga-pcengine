@@ -62,12 +62,17 @@ module linebuffer (
   // Incoming video data
   reg prev_hsync_in = 0;
   reg prev_vsync_in = 0;
+  reg prev_disable_pix = 0;
 
   reg [9:0] output_line_width  /* synthesis noprune */;
+
+  reg [3:0] enable_delay = 0;
+  reg [3:0] border_delay = 0;
 
   always @(posedge clk_vid) begin
     prev_hsync_in <= hsync_in;
     prev_vsync_in <= vsync_in;
+    prev_disable_pix <= disable_pix;
 
     bank_write <= 0;
 
@@ -79,8 +84,26 @@ module linebuffer (
       output_line_width  <= bank_line_width;
     end
 
-    if (ce_pix && ~disable_pix) begin
-      bank_write <= 1;
+    // Handle the weird timing of borders
+    if (~disable_pix && prev_disable_pix) begin
+      // Falling edge of border
+      enable_delay <= 3;
+    end else if (disable_pix && ~prev_disable_pix) begin
+      // Rising edge of border
+      border_delay <= 4;
+    end else if (ce_pix) begin
+      if (border_delay > 0) begin
+        border_delay <= border_delay - 1;
+      end
+
+      if (~disable_pix || border_delay > 0) begin
+        if (enable_delay > 0) begin
+          enable_delay <= enable_delay - 1;
+        end else begin
+          // Delay finished, draw pixel
+          bank_write <= 1;
+        end
+      end
     end
   end
 
@@ -131,7 +154,10 @@ module linebuffer (
       border_end_offset <= 0;
     end
 
-    if (hs_delay == 0 && ~bank_empty) begin
+    if (calculated_border == 0 && hs_delay == 1) begin
+      // If no border, set read ack high one pixel early
+      bank_read_ack <= 1;
+    end else if (hs_delay == 0 && ~bank_empty) begin
       // Write out video data
       // TODO: Calculate centering
       de <= 1;
@@ -140,6 +166,10 @@ module linebuffer (
       line_started <= 1;
 
       if (border_start_offset < calculated_border) begin
+        if (border_start_offset == calculated_border - 1) begin
+          // Set high one pixel early
+          bank_read_ack <= 1;
+        end
         border_start_offset <= border_start_offset + 1;
 
         rgb_out <= 0;
