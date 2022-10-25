@@ -132,7 +132,8 @@ module linebuffer (
   end
 
   wire [9:0] width_diff = expected_line_width > output_line_width ? expected_line_width - output_line_width : 0  /* synthesis keep */;
-  wire [8:0] calculated_border = width_diff[9:1]  /* synthesis keep */;
+  // Divide by 2 and round up
+  wire [8:0] calculated_border = width_diff[0] ? width_diff[9:1] + 1 : width_diff[9:1]  /* synthesis keep */;
 
   wire [23:0] video_slot_rgb = {7'b0, slot, 10'b0, 3'b0};
 
