@@ -85,7 +85,33 @@ module linebuffer (
   end
 
   // Outgoing video data
+  reg prev_de = 0;
+
   reg [3:0] hs_delay = 0;
+  reg [8:0] border_start_offset = 0;
+  reg [8:0] border_end_offset = 0;
+  reg line_started = 0;
+
+  reg [9:0] expected_line_width;
+  reg [3:0] slot;
+
+  always @(*) begin
+    if (output_line_width < 280) begin
+      expected_line_width <= 10'd256;
+      slot <= 0;
+    end else if (output_line_width < 380) begin
+      expected_line_width <= 10'd360;
+      slot <= 2;
+    end else begin
+      expected_line_width <= 10'd512;
+      slot <= 4;
+    end
+  end
+
+  wire [9:0] width_diff = expected_line_width > output_line_width ? expected_line_width - output_line_width : 0  /* synthesis keep */;
+  wire [8:0] calculated_border = width_diff[9:1]  /* synthesis keep */;
+
+  wire [23:0] video_slot_rgb = {7'b0, slot, 10'b0, 3'b0};
 
   always @(posedge clk_vid) begin
     bank_read_ack <= 0;
@@ -99,16 +125,41 @@ module linebuffer (
     if (~prev_hsync_in && hsync_in) begin
       // HSync went high. Delay by 6 vid cycles to prevent overlapping with VSync
       hs_delay <= 15;
+      line_started <= 0;
+
+      border_start_offset <= 0;
+      border_end_offset <= 0;
     end
 
     if (hs_delay == 0 && ~bank_empty) begin
       // Write out video data
       // TODO: Calculate centering
-      bank_read_ack <= 1;
       de <= 1;
 
-      rgb_out <= bank_q;
+      // Track whether we've written pixels
+      line_started <= 1;
+
+      if (border_start_offset < calculated_border) begin
+        border_start_offset <= border_start_offset + 1;
+
+        rgb_out <= 0;
+      end else begin
+        bank_read_ack <= 1;
+
+        rgb_out <= bank_q;
+      end
+    end else if (line_started && bank_empty && border_end_offset < calculated_border) begin
+      // We've exhausted the line buffer, write black until we're done
+      border_end_offset <= border_end_offset + 1;
+
+      de <= 1;
+      rgb_out <= 0;
+    end else if (prev_de) begin
+      // Falling edge of de
+      rgb_out <= video_slot_rgb;
     end
+
+    prev_de <= de;
   end
 
   // Hsync delayed by 6 cycles

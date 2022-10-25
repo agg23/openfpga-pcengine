@@ -861,9 +861,6 @@ module core_top (
   //   endcase
   // end
 
-  // If not 352, both 256 and 512 have the same number of clocks (256 is doubled)
-  wire [9:0] expected_line_width = dotclock_divider == 2'b01 ? 10'd352 : 10'd512;
-
   assign video_rgb_clock = clk_sys_42_95;
   assign video_rgb_clock_90 = clk_vid_42_95_90deg;
 
