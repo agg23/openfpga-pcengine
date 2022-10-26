@@ -834,33 +834,6 @@ module core_top (
   wire video_vs_core;
   wire [23:0] vid_rgb_core;
 
-  // reg video_de_reg;
-  // reg video_hs_reg;
-  // reg video_vs_reg;
-  // reg [23:0] video_rgb_reg;
-
-  // reg current_pix_clk;
-  // reg current_pix_clk_90;
-
-  // always @(*) begin
-  //   casex (dotclock_divider)
-  //     // 2'b00: begin
-  //     //   current_pix_clk <= clk_vid_5_369;
-  //     //   current_pix_clk_90 <= clk_vid_5_369_90deg;
-  //     // end
-  //     2'b01: begin
-  //       current_pix_clk <= clk_vid_7_159;
-  //       current_pix_clk_90 <= clk_vid_7_159_90deg;
-  //     end
-  //     // 2'b1X: begin
-  //     default: begin
-  //       // Both 512 and 256 at the same clock. 256 is doubled
-  //       current_pix_clk <= clk_vid_10_738;
-  //       current_pix_clk_90 <= clk_vid_10_738_90deg;
-  //     end
-  //   endcase
-  // end
-
   assign video_rgb_clock = clk_sys_42_95;
   assign video_rgb_clock_90 = clk_vid_42_95_90deg;
 

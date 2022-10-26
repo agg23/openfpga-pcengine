@@ -64,10 +64,16 @@ module linebuffer (
   reg prev_vsync_in = 0;
   reg prev_disable_pix = 0;
 
-  reg [9:0] output_line_width  /* synthesis noprune */;
+  /// The number of pixels drawn in the last line (latched)
+  reg [9:0] output_line_width;
+  /// The number of lines drawn (only content, not empty)
+  reg [9:0] output_line;
 
   reg [3:0] enable_delay = 0;
   reg [3:0] border_delay = 0;
+
+  reg line_224 = 0;
+  reg [9:0] expected_line_count = 0;
 
   always @(posedge clk_vid) begin
     prev_hsync_in <= hsync_in;
@@ -76,12 +82,17 @@ module linebuffer (
 
     bank_write <= 0;
 
+    if (vsync_in && ~prev_vsync_in) begin
+      line_224 <= output_line < 231;
+      expected_line_count <= output_line < 231 ? 224 : 240;
+    end
+
     if (hsync_in && ~prev_hsync_in) begin
       // Hsync, switch banks
       output_bank_select <= ~output_bank_select;
 
       // Latch width of new output bank
-      output_line_width  <= bank_line_width;
+      output_line_width  <= bank_line_width > 0 ? bank_line_width : output_line_width;
     end
 
     // Handle the weird timing of borders
@@ -114,9 +125,18 @@ module linebuffer (
   reg [8:0] border_start_offset = 0;
   reg [8:0] border_end_offset = 0;
   reg line_started = 0;
+  reg prev_line_started = 0;
+
+  /// Whether or not this line is empty
+  reg line_empty = 0;
+  /// The number of "empty" (black) lines drawn
+  reg [9:0] line_empty_count = 0;
+
+  /// Total lines drawn to the screen (including empty black lines)
+  reg [9:0] total_rendered_count;
 
   reg [9:0] expected_line_width;
-  reg [3:0] slot;
+  reg [2:0] slot;
 
   always @(*) begin
     if (output_line_width < 280) begin
@@ -124,10 +144,10 @@ module linebuffer (
       slot <= 0;
     end else if (output_line_width < 380) begin
       expected_line_width <= 10'd360;
-      slot <= 2;
+      slot <= 1;
     end else begin
       expected_line_width <= 10'd512;
-      slot <= 4;
+      slot <= 2;
     end
   end
 
@@ -135,7 +155,7 @@ module linebuffer (
   // Divide by 2 and round up
   wire [8:0] calculated_border = width_diff[0] ? width_diff[9:1] + 1 : width_diff[9:1]  /* synthesis keep */;
 
-  wire [23:0] video_slot_rgb = {7'b0, slot, 10'b0, 3'b0};
+  wire [23:0] video_slot_rgb = {7'b0, slot, line_224, 10'b0, 3'b0};
 
   always @(posedge clk_vid) begin
     bank_read_ack <= 0;
@@ -146,30 +166,61 @@ module linebuffer (
       hs_delay <= hs_delay - 1;
     end
 
-    if (~prev_hsync_in && hsync_in) begin
+    if (~prev_vsync_in && vsync_in) begin
+      // Reset line_started
+      line_started <= 0;
+
+      prev_line_started <= 0;
+      total_rendered_count <= 0;
+      output_line <= 0;
+    end else if (~prev_hsync_in && hsync_in) begin
       // HSync went high. Delay by 6 vid cycles to prevent overlapping with VSync
       hs_delay <= 15;
       line_started <= 0;
 
+      prev_line_started <= line_started;
+
       border_start_offset <= 0;
       border_end_offset <= 0;
+
+      line_empty <= 0;
+      line_empty_count <= 0;
     end
 
-    if (calculated_border == 0 && hs_delay == 1) begin
+    if (hs_delay == 1 && bank_empty && prev_line_started && total_rendered_count < expected_line_count) begin
+      // Right before draw, and no pixels, and previous line drew. This line will be empty
+      line_empty <= 1;
+      total_rendered_count <= total_rendered_count + 1;
+    end
+
+    if (line_empty && line_empty_count < expected_line_width) begin
+      // Empty line, draw pixels up until expected_line_width
+      de <= 1;
+      rgb_out <= 0;
+      line_started <= 1;
+      // Make sure we don't draw extra border pixels
+      border_end_offset <= calculated_border;
+
+      line_empty_count <= line_empty_count + 1;
+    end else if (calculated_border == 0 && hs_delay == 1 && ~bank_empty) begin
       // If no border, set read ack high one pixel early
       bank_read_ack <= 1;
+      total_rendered_count <= total_rendered_count + 1;
+      output_line <= output_line + 1;
     end else if (hs_delay == 0 && ~bank_empty) begin
       // Write out video data
-      // TODO: Calculate centering
       de <= 1;
 
       // Track whether we've written pixels
       line_started <= 1;
 
       if (border_start_offset < calculated_border) begin
+        // Draw black bars to center video
         if (border_start_offset == calculated_border - 1) begin
           // Set high one pixel early
           bank_read_ack <= 1;
+          total_rendered_count <= total_rendered_count + 1;
+          output_line <= output_line + 1;
         end
         border_start_offset <= border_start_offset + 1;
 
