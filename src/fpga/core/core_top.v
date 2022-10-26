@@ -808,6 +808,7 @@ module core_top (
       .dram_cas_n(dram_cas_n),
       .dram_we_n(dram_we_n),
 
+      .ce_pix (ce_pix),
       .hblank (h_blank),
       .vblank (v_blank),
       .hsync  (video_hs_core),
@@ -826,154 +827,34 @@ module core_top (
   ////////////////////////////////////////////////////////////////////////////////////////
 
   // Video
+  wire ce_pix;
   wire h_blank;
   wire v_blank;
   wire video_hs_core;
   wire video_vs_core;
   wire [23:0] vid_rgb_core;
 
-  // reg video_de_reg;
-  // reg video_hs_reg;
-  // reg video_vs_reg;
-  // reg [23:0] video_rgb_reg;
+  assign video_rgb_clock = clk_sys_42_95;
+  assign video_rgb_clock_90 = clk_vid_42_95_90deg;
 
-  reg current_pix_clk;
-  reg current_pix_clk_90;
-
-  always @(*) begin
-    casex (dotclock_divider)
-      // 2'b00: begin
-      //   current_pix_clk <= clk_vid_5_369;
-      //   current_pix_clk_90 <= clk_vid_5_369_90deg;
-      // end
-      2'b01: begin
-        current_pix_clk <= clk_vid_7_159;
-        current_pix_clk_90 <= clk_vid_7_159_90deg;
-      end
-      // 2'b1X: begin
-      default: begin
-        // Both 512 and 256 at the same clock. 256 is doubled
-        current_pix_clk <= clk_vid_10_738;
-        current_pix_clk_90 <= clk_vid_10_738_90deg;
-      end
-    endcase
-  end
-
-  // If not 352, both 256 and 512 have the same number of clocks (256 is doubled)
-  wire [9:0] expected_line_width = dotclock_divider == 2'b01 ? 10'd352 : 10'd512;
-
-  assign video_rgb_clock = current_pix_clk;
-  assign video_rgb_clock_90 = current_pix_clk_90;
-
-  // If last clock de was high, then was last pixel. Set end of line bits
-  assign video_rgb = de ? vid_rgb_core : expanded_de_prev && ~expanded_de ? video_slot_rgb : 0;
-  assign video_de = expanded_de;
   assign video_skip = 0;
-  // Set VSync to be high for a single cycle on the rising edge of the VSync coming out of the core
-  assign video_vs = ~vs_prev && video_vs_core;
-  assign video_hs = hs_delay == 1;
 
-  wire [8:0] expected_line_count = overscan_enable_s ? 224 : 240;
+  linebuffer linebuffer (
+      .clk_vid(clk_sys_42_95),
 
-  wire de = ~h_blank && ~v_blank && ~(border_delay > 0);
+      .vsync_in(video_vs_core),
+      .hsync_in(video_hs_core),
 
-  // Customize h_blank to only occur if we've met the line width requirements
-  wire expanded_h_blank = h_blank && ~(line_started && pixel_count < expected_line_width);
+      .ce_pix(ce_pix),
+      .disable_pix(border),
+      .rgb_in(vid_rgb_core),
 
-  // Customize v_blank to only occur if we've met the line count requirements
-  wire expanded_v_blank = v_blank && ~(frame_started && line_count < 240) || video_vs_core;
+      .vsync_out(video_vs),
+      .hsync_out(video_hs),
 
-  // If we have a border delay (number of pixels from border low), a pixel count below 24, and a total number of pixel clocks
-  // since hsync under 160, we're in border.
-  // If number of pixel clocks since hsync exceeds 160, we are obviously out of border and we might need to draw an empty line to match the scaler's height
-  wire expanded_border = border_delay > 0 && pixel_count < 24 && pixel_cycle_count < 160;
-
-  // Force DE to remain high if the pixel count for this line, or the line count for this frame hasn't been met
-  wire expanded_de = (~expanded_h_blank && ~expanded_v_blank && ~expanded_border && pixel_count < expected_line_width && line_count < expected_line_count) || de;
-
-  reg [2:0] hs_delay = 0;
-  reg hs_prev = 0;
-  reg vs_prev = 0;
-  reg de_prev = 0;
-  reg expanded_de_prev = 0;
-  reg line_started = 0;
-  reg frame_started = 0;
-  reg [2:0] border_delay = 0;
-
-  reg [9:0] pixel_count = 0;
-  reg [9:0] pixel_cycle_count = 0;
-  reg [9:0] max_pixel_count = 0;
-  reg [8:0] line_count = 0;
-
-  // If max hasn't been set yet, use the current pixel count
-  reg [9:0] last_max_pixel_count = 0;
-  wire [9:0] current_max_pixel_count = max_pixel_count > 0 ? max_pixel_count : last_max_pixel_count;
-
-  wire [1:0] video_slot = current_max_pixel_count > 380 ? 0 :
-  // 352
-  current_max_pixel_count > 330 ? 2 :
-  // 320
-  current_max_pixel_count > 280 ? 1 :
-  // 256
-  0;
-
-  wire [23:0] video_slot_rgb = {8'b0, video_slot, overscan_enable_s, 10'b0, 3'b0};
-
-  always @(posedge current_pix_clk) begin
-    if (~video_vs_core && vs_prev) begin
-      line_count <= 0;
-      frame_started <= 0;
-      max_pixel_count <= 0;
-      last_max_pixel_count <= max_pixel_count;
-    end
-
-    // Count number of pixel cycles, not necessarily drawn ones
-    pixel_cycle_count <= pixel_cycle_count + 1;
-
-    if (video_hs_core && ~hs_prev) begin
-      pixel_cycle_count <= 0;
-      pixel_count <= 0;
-      line_started <= 0;
-
-      // Keep track of the lines in the frame (number of hsyncs)
-      if (frame_started) begin
-        line_count <= line_count + 1;
-      end
-    end else if (expanded_de || line_started) begin
-      // Once DE is asserted for the first time, count the pixels we render
-      pixel_count   <= pixel_count + 1;
-      line_started  <= 1;
-      frame_started <= 1;
-    end
-
-    if (~de && de_prev) begin
-      // Keep a running tally of the max pixels in each line. We use this to decide which video mode we're in
-      if (pixel_count > max_pixel_count) begin
-        max_pixel_count <= pixel_count;
-      end
-    end
-
-    // Border goes low 4 pixels before finishing the border area for some reason
-    if (border) begin
-      border_delay <= 4;
-    end else if (border_delay > 0) begin
-      border_delay <= border_delay - 1;
-    end
-
-    if (hs_delay > 0) begin
-      hs_delay <= hs_delay - 1;
-    end
-
-    if (~hs_prev && video_hs_core) begin
-      // HSync went high. Delay by 6 vid cycles to prevent overlapping with VSync
-      hs_delay <= 6;
-    end
-
-    hs_prev <= video_hs_core;
-    vs_prev <= video_vs_core;
-    de_prev <= de;
-    expanded_de_prev <= expanded_de;
-  end
+      .de(video_de),
+      .rgb_out(video_rgb)
+  );
 
   ///////////////////////////////////////////////
 
@@ -997,10 +878,11 @@ module core_top (
 
   wire clk_mem_85_91;
   wire clk_sys_42_95;
-  wire clk_vid_10_738;
-  wire clk_vid_10_738_90deg;
-  wire clk_vid_7_159;
-  wire clk_vid_7_159_90deg;
+  wire clk_vid_42_95_90deg;
+  // wire clk_vid_10_738;
+  // wire clk_vid_10_738_90deg;
+  // wire clk_vid_7_159;
+  // wire clk_vid_7_159_90deg;
 
   wire pll_core_locked;
 
@@ -1010,10 +892,11 @@ module core_top (
 
       .outclk_0(clk_mem_85_91),
       .outclk_1(clk_sys_42_95),
-      .outclk_2(clk_vid_10_738),
-      .outclk_3(clk_vid_10_738_90deg),
-      .outclk_4(clk_vid_7_159),
-      .outclk_5(clk_vid_7_159_90deg),
+      .outclk_2(clk_vid_42_95_90deg),
+      // .outclk_2(clk_vid_10_738),
+      // .outclk_3(clk_vid_10_738_90deg),
+      // .outclk_4(clk_vid_7_159),
+      // .outclk_5(clk_vid_7_159_90deg),
 
       .locked(pll_core_locked)
   );

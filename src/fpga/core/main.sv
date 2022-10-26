@@ -102,6 +102,7 @@ module pce (
     output wire        dram_we_n,
 
     // Video
+    output reg ce_pix,
     output wire hsync,
     output wire vsync,
     output wire hblank,
@@ -365,7 +366,6 @@ module pce (
 
   wire ce_vid;
 
-  reg  ce_pix;
   always @(posedge clk_mem_85_91) begin
     reg old_ce;
 
