@@ -31,20 +31,26 @@ Core supports four players/controllers via the Analogue Dock. To enable four pla
 
 Some games support a 6 button controller. For those games, enable the `Use 6 Button Ctrl` option in `Core Settings`. Please note that this option can break games that don't support the 6 button controller, so turn it off if you're not using it.
 
+### Controller Turbo
+
+Like the original PC Engine controllers, this core supports multiple turbo modes. Adjust the `I` and `II` button turbo modes, and use the `X` and `Y` buttons (by default) as your turbo buttons. Note that the original PCE controllers had the turbo on the `I` and `II` buttons directly, rather than having separate buttons, but since the Pocket has more than just two, we use them for the turbo.
+
 ### Video Modes
 
-The PC Engine is unique in that it can arbitrarily decide what resolution to display at. The Pocket is more limited, requiring fixed resolutions at all times. I've tried to compromise and cover the most common resolutions output by the PCE, but some are better supported than others. You should see the best support with horizontal resolutions of 256, 320, 352, and 512 pixels wide. It seems that some of these resolutions drop one or two pixels on the right-hand side of the screen. I haven't figured out what is causing this. Resolutions between 320 and 352 will have some amount of blank black space on the right side.
+The PC Engine is unique in that it can arbitrarily decide what resolution to display at. The Pocket is more limited, requiring fixed resolutions at all times. I've tried to compromise and cover the most common resolutions output by the PCE, but some are better supported than others. You should see the video centered on the screen with surrounding black bars on some resolutions, but the aspect ratios should be correct.
 
 ### Video Options
 
-There are several options provided for tweaking the displayed video:
-
-* `Hide Overscan` - Adjusts the top and bottom of the video to mask lines that would normally be masked by the CRT. Adjusts the aspect ratio to correspond with this modification
 * `Extra Sprites` - Allows extra sprites to be displayed on each line. Will decrease flickering in some games
+* `Raw RGB Color` - Use the raw RGB color palette output by the HUC6260. If disabled, will use the composite color palette
 
 ### Audio Options
 
 The core can be quiet in some games, so there are options to boost the master audio (`Master Audio Boost`) and ADPCM channels (`PCM Audio Boost`).
+
+### Memory Cards
+
+Instead of sharing a memory card (as you would in real life), each game gets its own save file and therefore memory card. Some games don't have the ability to initialize a memory card, so each newly created save file is pre-initialized for use.
 
 ## Licensing
 
