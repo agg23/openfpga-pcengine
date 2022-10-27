@@ -50,7 +50,7 @@
       },
       {
         "name": "Button II Turbo",
-        "id": 22,
+        "id": 23,
         "type": "slider_u32",
         "enabled": true,
         "address": "0x0000010C",

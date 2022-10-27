@@ -7,7 +7,7 @@
       "description": "PC Engine (known as TurboGrafx-16 in the US) by NEC",
       "author": "agg23",
       "url": "https://github.com/agg23/openfpga-pcengine/",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "date_release": "2022-10-27"
     },
     "framework": {
