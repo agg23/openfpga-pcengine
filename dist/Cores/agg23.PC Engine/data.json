@@ -7,12 +7,12 @@
         "id": 0,
         "required": true,
         "parameters": "0x109",
-        "extensions": ["pce"],
+        "extensions": ["pce", "sgx"],
         "address": "0x10000000"
       },
       {
         "name": "Save",
-        "id": 10,
+        "id": 1,
         "required": false,
         "parameters": "0x84",
         "nonvolatile": true,
