@@ -54,9 +54,7 @@ ld r2,#1 // Downloading start
 pmpw r1,r2 // Write save_download = 1
 
 ld r1,#save_dataslot
-ld r14,#load_err_msg
 loadf r1 // Load save
-jp nz,print_error_and_exit
 
 ld r1,#4 // Set address for write
 ld r2,#0 // Downloading end
