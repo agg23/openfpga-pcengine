@@ -19,7 +19,9 @@ To install the core, copy the `Assets`, `Cores`, and `Platform` folders over to 
 
 ROMs should be placed in `/Assets/pce/common`
 
-Please note that SuperGrafx and CD games are not currently supported, due to needing fixes/feature support in the firmware. They will be added in a future update.
+SuperGrafix games **_MUST_** have the `.sgx` extension, as otherwise there's no way for the core to tell that it uses the SuperGrafx hardware.
+
+Please note that CD games are not currently supported. Support will be added in a future update.
 
 ## Features
 
