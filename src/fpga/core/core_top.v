@@ -330,10 +330,13 @@ module core_top (
 
     if (bridge_wr) begin
       casex (bridge_addr)
-        // 32'h0: begin
-        //   ioctl_download <= bridge_wr_data[0];
-        // end
+        32'h0: begin
+          ioctl_download <= bridge_wr_data[0];
+        end
         32'h4: begin
+          save_download <= bridge_wr_data[0];
+        end
+        32'h8: begin
           is_sgx <= bridge_wr_data[0];
         end
         32'h50: begin
@@ -484,15 +487,16 @@ module core_top (
   );
 
   reg ioctl_download = 0;
+  reg save_download = 0;
   reg is_sgx = 0;
   wire ioctl_wr;
   wire [23:0] ioctl_addr;
   wire [15:0] ioctl_dout;
 
-  always @(posedge clk_74a) begin
-    if (dataslot_requestwrite) ioctl_download <= 1;
-    else if (dataslot_allcomplete) ioctl_download <= 0;
-  end
+  // always @(posedge clk_74a) begin
+  //   if (dataslot_requestwrite) ioctl_download <= 1;
+  //   else if (dataslot_allcomplete) ioctl_download <= 0;
+  // end
 
   wire [31:0] sd_read_data;
 
@@ -505,17 +509,17 @@ module core_top (
   wire [24:0] sd_buff_addr_in;
   wire [24:0] sd_buff_addr_out;
 
-  wire save_loading = dataslot_requestwrite_id == 1 || dataslot_requestread_id == 1;
+  // wire save_loading = dataslot_requestwrite_id == 1 || dataslot_requestread_id == 1;
 
   wire ioctl_download_s;
-  wire save_loading_s;
+  wire save_download_s;
   wire is_sgx_s;
 
   synch_3 #(
       .WIDTH(3)
   ) download_s (
-      {ioctl_download, save_loading, is_sgx},
-      {ioctl_download_s, save_loading_s, is_sgx_s},
+      {ioctl_download, save_download, is_sgx},
+      {ioctl_download_s, save_download_s, is_sgx_s},
       clk_mem_85_91
   );
 
@@ -795,7 +799,7 @@ module core_top (
       .sd_lba(sd_buff_addr[24:9]),
       .sd_buff_dout(sd_buff_dout),
       .sd_buff_din(sd_buff_din),
-      .save_loading(save_loading_s),
+      .save_download(save_download_s),
 
       // SDRAM
       .dram_a(dram_a),

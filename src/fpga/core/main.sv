@@ -88,7 +88,7 @@ module pce (
     input wire [16:0] sd_lba,
     input wire [15:0] sd_buff_dout,
     output wire [15:0] sd_buff_din,
-    input wire save_loading,
+    input wire save_download,
 
     // SDRAM
     output wire [12:0] dram_a,
@@ -119,7 +119,7 @@ module pce (
     output wire [15:0] audio_r
 );
 
-  wire                                      [63:0] status = 0;
+  wire                                       [63:0] status = 0;
 
   wire code_download = 0;
 
@@ -132,10 +132,10 @@ module pce (
 
   wire VDC_BG_EN = 1;
   wire VDC_SPR_EN = 1;
-  wire                                      [ 1:0] VDC_GRID_EN = 2'd0;
+  wire                                       [ 1:0] VDC_GRID_EN = 2'd0;
   wire CPU_PAUSE_EN = 0;
 
-  wire reset = (core_reset | save_loading);
+  wire reset = (core_reset | save_download);
 
   // wire code_index      = &ioctl_index;
   // wire code_download   = ioctl_download & code_index;
@@ -144,17 +144,17 @@ module pce (
 
   wire overscan = ~status[17];
 
-  wire                                      [95:0]                     cd_comm;
-  wire                                                                 cd_comm_send;
-  reg                                       [15:0]                     cd_stat;
-  reg                                                                  cd_stat_rec;
-  reg                                                                  cd_dataout_req;
-  wire                                      [79:0]                     cd_dataout;
-  wire                                                                 cd_dataout_send;
-  wire                                                                 cd_reset_req;
-  reg                                                                  cd_region;
+  wire                                       [95:0]                     cd_comm;
+  wire                                                                  cd_comm_send;
+  reg                                        [15:0]                     cd_stat;
+  reg                                                                   cd_stat_rec;
+  reg                                                                   cd_dataout_req;
+  wire                                       [79:0]                     cd_dataout;
+  wire                                                                  cd_dataout_send;
+  wire                                                                  cd_reset_req;
+  reg                                                                   cd_region;
 
-  wire                                      [21:0]                     cd_ram_a;
+  wire                                       [21:0]                     cd_ram_a;
   wire cd_ram_rd, cd_ram_wr;
   wire [7:0] cd_ram_do;
 
@@ -433,7 +433,7 @@ module pce (
 
   ////////////////////////////  MEMORY  //////////////////////////////////
 
-  localparam LITE = 1;
+  localparam LITE = 0;
 
   wire [21:0] rom_rdaddr;
   wire [ 7:0] rom_sdata;

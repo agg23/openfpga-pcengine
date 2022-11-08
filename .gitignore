@@ -1,6 +1,8 @@
 *.rbf_r
 *.rev
 *.zip
+dist/**/chip32.bin
+src/support/*.bin
 src/sim/work/
 src/sim/*.hex
 src/sim/*.mem
