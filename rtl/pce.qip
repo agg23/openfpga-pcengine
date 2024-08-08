@@ -1,0 +1,22 @@
+# ==============================================================================
+# Quartus Prime QIP Index File
+# ==============================================================================
+set_global_assignment -name QIP_FILE           [file join $::quartus(qip_path) "pce/cd/cd.qip"]
+set_global_assignment -name QIP_FILE           [file join $::quartus(qip_path) "pce/HUC6280/HUC6280.qip"]
+set_global_assignment -name SYSTEMVERILOG_FILE [file join $::quartus(qip_path) "pce/arcade.sv"]
+set_global_assignment -name SYSTEMVERILOG_FILE [file join $::quartus(qip_path) "pce/cache_2way.sv"]
+set_global_assignment -name VHDL_FILE          [file join $::quartus(qip_path) "pce/CEGen.vhd"]
+set_global_assignment -name SYSTEMVERILOG_FILE [file join $::quartus(qip_path) "pce/cheatcodes.sv"]
+set_global_assignment -name SYSTEMVERILOG_FILE [file join $::quartus(qip_path) "pce/color_mix.sv"]
+set_global_assignment -name SYSTEMVERILOG_FILE [file join $::quartus(qip_path) "pce/ddram.sv"]
+set_global_assignment -name VHDL_FILE          [file join $::quartus(qip_path) "pce/dpram.vhd"]
+set_global_assignment -name VERILOG_FILE       [file join $::quartus(qip_path) "pce/hps_ext.v"]
+set_global_assignment -name VHDL_FILE          [file join $::quartus(qip_path) "pce/huc6202.vhd"]
+set_global_assignment -name VHDL_FILE          [file join $::quartus(qip_path) "pce/huc6260.vhd"]
+set_global_assignment -name VHDL_FILE          [file join $::quartus(qip_path) "pce/huc6270.vhd"]
+set_global_assignment -name SYSTEMVERILOG_FILE [file join $::quartus(qip_path) "pce/mb128.sv"]
+set_global_assignment -name VHDL_FILE          [file join $::quartus(qip_path) "pce/pce_top.vhd"]
+set_global_assignment -name SYSTEMVERILOG_FILE [file join $::quartus(qip_path) "pce/sdram.sv"]
+set_global_assignment -name VERILOG_FILE       [file join $::quartus(qip_path) "pce/xe1ap.v"]
+set_global_assignment -name VERILOG_FILE       [file join $::quartus(qip_path) "sys/iir_filter.v"]
+set_global_assignment -name SYSTEMVERILOG_FILE [file join $::quartus(qip_path) "main.sv"]
