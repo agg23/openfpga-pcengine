@@ -235,7 +235,6 @@ module pce (
 
       .ReducedVBL(~overscan_enable),
       .BORDER_EN(0),
-      .DOTCLOCK_DIVIDER(dotclock_divider),
       .VIDEO_R(r),
       .VIDEO_G(g),
       .VIDEO_B(b),
